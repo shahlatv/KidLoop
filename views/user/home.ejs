@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KidLoop | Kids Clothing</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #222;
+            background: #fff;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+
+        /* =====================================
+           HERO SECTION
+        ===================================== */
+
+        .hero {
+            width: 100%;
+            background: #f5f1ec;
+            padding: 35px 4%;
+        }
+
+
+        .hero-container {
+            max-width: 1450px;
+            min-height: 570px;
+            margin: auto;
+
+            display: grid;
+            grid-template-columns: 28% 44% 28%;
+
+            overflow: hidden;
+        }
+
+
+        /* LEFT IMAGE */
+
+        .hero-left {
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .hero-left img {
+            width: 100%;
+            height: 100%;
+            min-height: 570px;
+
+            object-fit: cover;
+            display: block;
+
+            transition: transform 0.5s ease;
+        }
+
+
+        .hero-left:hover img {
+            transform: scale(1.04);
+        }
+
+
+        /* CENTER CONTENT */
+
+        .hero-content {
+            background: #f5f1ec;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            padding: 50px 35px;
+        }
+
+
+        .hero-small-text {
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            color: #666;
+
+            margin-bottom: 25px;
+        }
+
+
+        .hero-title {
+            font-size: clamp(55px, 6vw, 92px);
+
+            line-height: 0.88;
+
+            font-weight: 800;
+
+            letter-spacing: -5px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .hero-title span {
+            display: block;
+        }
+
+
+        .hero-title span:last-child {
+            font-weight: 400;
+            font-style: italic;
+        }
+
+
+        .hero-description {
+            max-width: 360px;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            color: #555;
+
+            margin-bottom: 30px;
+        }
+
+
+        .hero-button {
+            display: inline-block;
+
+            padding: 15px 32px;
+
+            background: #222;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+
+            transition: 0.3s;
+        }
+
+
+        .hero-button:hover {
+            background: #555;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* RIGHT IMAGE */
+
+        .hero-right {
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .hero-right img {
+            width: 100%;
+            height: 100%;
+            min-height: 570px;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition: transform 0.5s ease;
+        }
+
+
+        .hero-right:hover img {
+            transform: scale(1.04);
+        }
+
+
+        /* HERO BADGES */
+
+        .hero-badge-left,
+        .hero-badge-right {
+
+            position: absolute;
+
+            bottom: 25px;
+
+            padding: 12px 16px;
+
+            background: white;
+
+            color: #222;
+
+            font-size: 10px;
+
+            font-weight: bold;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+        }
+
+
+        .hero-badge-left {
+            left: 20px;
+        }
+
+
+        .hero-badge-right {
+            right: 20px;
+        }
+
+
+        /* =====================================
+           INTRO SECTION
+        ===================================== */
+
+        .intro {
+            text-align: center;
+
+            padding: 75px 20px 50px;
+        }
+
+
+        .intro-small {
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            color: #777;
+
+            margin-bottom: 15px;
+        }
+
+
+        .intro h2 {
+            font-size: 38px;
+
+            font-weight: 500;
+
+            margin-bottom: 18px;
+        }
+
+
+        .intro p {
+            max-width: 650px;
+
+            margin: auto;
+
+            color: #666;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================
+           CATEGORIES
+        ===================================== */
+
+        .categories {
+            padding: 30px 5% 80px;
+        }
+
+
+        .section-heading {
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .section-heading h2 {
+            font-size: 32px;
+
+            font-weight: 500;
+        }
+
+
+        .section-heading p {
+            margin-top: 10px;
+
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        .category-grid {
+            max-width: 1300px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+
+        .category-card {
+            position: relative;
+
+            height: 450px;
+
+            overflow: hidden;
+
+            cursor: pointer;
+        }
+
+
+        .category-card img {
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+
+            transition: transform 0.5s ease;
+        }
+
+
+        .category-card:hover img {
+            transform: scale(1.05);
+        }
+
+
+        .category-overlay {
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            padding: 30px;
+
+            background: linear-gradient(
+                transparent 45%,
+                rgba(0, 0, 0, 0.65)
+            );
+        }
+
+
+        .category-content {
+            color: white;
+        }
+
+
+        .category-content h3 {
+            font-size: 28px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .category-content span {
+            font-size: 12px;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+        }
+
+
+        /* =====================================
+           WHY KIDLOOP
+        ===================================== */
+
+        .why-section {
+            background: #f7f5f2;
+
+            padding: 80px 5%;
+
+            text-align: center;
+        }
+
+
+        .why-section h2 {
+            font-size: 34px;
+
+            font-weight: 500;
+
+            margin-bottom: 45px;
+        }
+
+
+        .why-grid {
+            max-width: 1100px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 40px;
+        }
+
+
+        .why-card {
+            padding: 15px;
+        }
+
+
+        .why-icon {
+            font-size: 32px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .why-card h3 {
+            font-size: 18px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .why-card p {
+            color: #666;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================
+           PROMOTION
+        ===================================== */
+
+        .promotion {
+            padding: 80px 5%;
+        }
+
+
+        .promotion-container {
+            max-width: 1300px;
+
+            height: 380px;
+
+            margin: auto;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .promotion-container img {
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+
+        .promotion-overlay {
+            position: absolute;
+
+            inset: 0;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            background: rgba(0, 0, 0, 0.35);
+
+            color: white;
+        }
+
+
+        .promotion-overlay p {
+            font-size: 13px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 15px;
+        }
+
+
+        .promotion-overlay h2 {
+            font-size: 45px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .promotion-button {
+            padding: 13px 28px;
+
+            background: white;
+
+            color: #222;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =====================================
+           REVIEWS
+        ===================================== */
+
+        .reviews {
+            padding: 70px 5%;
+
+            text-align: center;
+        }
+
+
+        .reviews h2 {
+            font-size: 32px;
+
+            font-weight: 500;
+
+            margin-bottom: 40px;
+        }
+
+
+        .review-grid {
+            max-width: 1000px;
+
+            margin: auto;
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 25px;
+        }
+
+
+        .review-card {
+            padding: 30px;
+
+            background: #f7f5f2;
+        }
+
+
+        .stars {
+            letter-spacing: 3px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .review-card p {
+            color: #555;
+
+            line-height: 1.6;
+
+            font-size: 14px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .review-card strong {
+            font-size: 13px;
+        }
+
+
+        /* =====================================
+           TABLET
+        ===================================== */
+
+        @media (max-width: 1000px) {
+
+            .hero-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+
+            .hero-content {
+                grid-column: 1 / -1;
+
+                grid-row: 1;
+
+                min-height: 330px;
+            }
+
+
+            .hero-left,
+            .hero-right {
+                min-height: 400px;
+            }
+
+
+            .hero-left img,
+            .hero-right img {
+                min-height: 400px;
+            }
+
+
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+
+            .why-grid,
+            .review-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        /* =====================================
+           MOBILE
+        ===================================== */
+
+        @media (max-width: 600px) {
+
+            .hero {
+                padding: 15px;
+            }
+
+
+            .hero-container {
+                display: flex;
+
+                flex-direction: column;
+            }
+
+
+            .hero-content {
+                order: 2;
+
+                min-height: 360px;
+
+                padding: 45px 20px;
+            }
+
+
+            .hero-left {
+                order: 1;
+            }
+
+
+            .hero-right {
+                order: 3;
+            }
+
+
+            .hero-left,
+            .hero-right {
+                min-height: 350px;
+            }
+
+
+            .hero-left img,
+            .hero-right img {
+                min-height: 350px;
+            }
+
+
+            .hero-title {
+                font-size: 58px;
+            }
+
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .category-card {
+                height: 400px;
+            }
+
+
+            .intro h2 {
+                font-size: 30px;
+            }
+
+
+            .promotion {
+                padding: 50px 20px;
+            }
+
+
+            .promotion-container {
+                height: 330px;
+            }
+
+
+            .promotion-overlay h2 {
+                font-size: 34px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- TOP BAR -->
+
+    <%- include("../partials/topbar") %>
+
+
+    <!-- NAVBAR -->
+
+    <%- include("../partials/navbar") %>
+
+
+    <!-- =====================================
+         HERO SECTION
+    ====================================== -->
+
+    <section class="hero">
+
+        <div class="hero-container">
+
+
+            <!-- LEFT IMAGE -->
+
+            <div class="hero-left">
+
+                <img
+                    src="/images/home/hero-left.jpg"
+                    alt="Girls kids fashion"
+                >
+
+                <div class="hero-badge-left">
+                    Girls Collection
+                </div>
+
+            </div>
+
+
+            <!-- CENTER CONTENT -->
+
+            <div class="hero-content">
+
+                <div class="hero-small-text">
+                    KidLoop Kids Collection
+                </div>
+
+
+                <h1 class="hero-title">
+
+                    <span>LITTLE</span>
+
+                    <span>STYLES.</span>
+
+                </h1>
+
+
+                <p class="hero-description">
+
+                    Cute, comfortable and stylish
+                    clothing made for little ones.
+
+                </p>
+
+
+                <a
+                    href="/shop"
+                    class="hero-button"
+                >
+                    SHOP NOW
+                </a>
+
+            </div>
+
+
+            <!-- RIGHT IMAGE -->
+
+            <div class="hero-right">
+
+                <img
+                    src="/images/home/hero-right.jpg"
+                    alt="Boys kids fashion"
+                >
+
+                <div class="hero-badge-right">
+                    New Collection
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         INTRO
+    ====================================== -->
+
+    <section class="intro">
+
+        <div class="intro-small">
+            Welcome to KidLoop
+        </div>
+
+
+        <h2>
+            Little Styles, Big Smiles
+        </h2>
+
+
+        <p>
+
+            Explore thoughtfully selected kids'
+            clothing designed to keep little ones
+            comfortable, confident and stylish every day.
+
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         CATEGORIES
+    ====================================== -->
+
+    <section
+        class="categories"
+        id="categories"
+    >
+
+        <div class="section-heading">
+
+            <h2>
+                Shop By Category
+            </h2>
+
+
+            <p>
+                Find the perfect style for every little one.
+            </p>
+
+        </div>
+
+
+        <div class="category-grid">
+
+
+            <!-- GIRLS -->
+
+            <a
+                href="/shop?category=girls"
+                class="category-card"
+            >
+
+                <img
+                    src="/images/home/girls.jpg"
+                    alt="Girls clothing"
+                >
+
+
+                <div class="category-overlay">
+
+                    <div class="category-content">
+
+                        <h3>
+                            Girls
+                        </h3>
+
+
+                        <span>
+                            Explore Collection →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- BOYS -->
+
+            <a
+                href="/shop?category=boys"
+                class="category-card"
+            >
+
+                <img
+                    src="/images/home/boys.jpg"
+                    alt="Boys clothing"
+                >
+
+
+                <div class="category-overlay">
+
+                    <div class="category-content">
+
+                        <h3>
+                            Boys
+                        </h3>
+
+
+                        <span>
+                            Explore Collection →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- BABY -->
+
+            <a
+                href="/shop?category=baby"
+                class="category-card"
+            >
+
+                <img
+                    src="/images/home/baby.jpg"
+                    alt="Baby clothing"
+                >
+
+
+                <div class="category-overlay">
+
+                    <div class="category-content">
+
+                        <h3>
+                            Baby
+                        </h3>
+
+
+                        <span>
+                            Explore Collection →
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         WHY KIDLOOP
+    ====================================== -->
+
+    <section class="why-section">
+
+        <h2>
+            Why Choose KidLoop?
+        </h2>
+
+
+        <div class="why-grid">
+
+
+            <div class="why-card">
+
+                <div class="why-icon">
+                    ♡
+                </div>
+
+
+                <h3>
+                    Made for Little Ones
+                </h3>
+
+
+                <p>
+
+                    Carefully selected styles
+                    designed especially for kids.
+
+                </p>
+
+            </div>
+
+
+            <div class="why-card">
+
+                <div class="why-icon">
+                    ✦
+                </div>
+
+
+                <h3>
+                    Comfort First
+                </h3>
+
+
+                <p>
+
+                    Comfortable clothing made
+                    for everyday adventures.
+
+                </p>
+
+            </div>
+
+
+            <div class="why-card">
+
+                <div class="why-icon">
+                    ✓
+                </div>
+
+
+                <h3>
+                    Easy Shopping
+                </h3>
+
+
+                <p>
+
+                    A simple and enjoyable
+                    shopping experience for parents.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         PROMOTION
+    ====================================== -->
+
+    <section class="promotion">
+
+        <div class="promotion-container">
+
+
+            <img
+                src="/images/home/promotion.jpg"
+                alt="KidLoop kids collection"
+            >
+
+
+            <div class="promotion-overlay">
+
+                <p>
+                    KidLoop Collection
+                </p>
+
+
+                <h2>
+                    Dress Them Happy
+                </h2>
+
+
+                <a
+                    href="/shop"
+                    class="promotion-button"
+                >
+                    EXPLORE NOW
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         REVIEWS
+    ====================================== -->
+
+    <section class="reviews">
+
+        <h2>
+            What Parents Say
+        </h2>
+
+
+        <div class="review-grid">
+
+
+            <div class="review-card">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+
+                <p>
+
+                    "The clothes are beautiful
+                    and my daughter absolutely loved them."
+
+                </p>
+
+
+                <strong>
+                    — Happy Parent
+                </strong>
+
+            </div>
+
+
+            <div class="review-card">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+
+                <p>
+
+                    "Good quality, comfortable
+                    and perfect for everyday wear."
+
+                </p>
+
+
+                <strong>
+                    — Happy Parent
+                </strong>
+
+            </div>
+
+
+            <div class="review-card">
+
+                <div class="stars">
+                    ★★★★★
+                </div>
+
+
+                <p>
+
+                    "Loved the collection and
+                    the shopping experience."
+
+                </p>
+
+
+                <strong>
+                    — Happy Parent
+                </strong>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <%- include("../partials/footer") %>
+
+
+</body>
+
+</html>

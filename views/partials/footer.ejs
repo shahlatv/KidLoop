@@ -1,0 +1,285 @@
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <!-- BRAND -->
+        <div class="footer-column footer-brand">
+
+            <h2>KidLoop</h2>
+
+            <p>
+                Stylish, comfortable and affordable
+                clothing for little ones.
+            </p>
+
+            <div class="social-links">
+
+                <a href="#" aria-label="Instagram">
+                    Instagram
+                </a>
+
+                <a href="#" aria-label="Facebook">
+                    Facebook
+                </a>
+
+                <a href="#" aria-label="Pinterest">
+                    Pinterest
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SHOP -->
+        <div class="footer-column">
+
+            <h3>Shop</h3>
+
+            <a href="/shop?category=girls">
+                Girls
+            </a>
+
+            <a href="/shop?category=boys">
+                Boys
+            </a>
+
+            <a href="/shop?category=baby">
+                Baby
+            </a>
+
+            <a href="/shop?sort=newest">
+                New Arrivals
+            </a>
+
+        </div>
+
+
+        <!-- CUSTOMER CARE -->
+        <div class="footer-column">
+
+            <h3>Customer Care</h3>
+
+            <a href="/contact">
+                Contact Us
+            </a>
+
+            <a href="/user/orders">
+                Track Order
+            </a>
+
+            <a href="/user/returns">
+                Returns & Refunds
+            </a>
+
+            <a href="/user/faq">
+                FAQs
+            </a>
+
+        </div>
+
+
+        <!-- MY ACCOUNT -->
+        <div class="footer-column">
+
+            <h3>My Account</h3>
+
+            <a href="/user/profile">
+                My Profile
+            </a>
+
+            <a href="/user/orders">
+                My Orders
+            </a>
+
+            <a href="/wishlist">
+                Wishlist
+            </a>
+
+            <a href="/cart">
+                Cart
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER BOTTOM -->
+
+    <div class="footer-bottom">
+
+        <p>
+            © 2026 KidLoop. All rights reserved.
+        </p>
+
+        <div class="legal-links">
+
+            <a href="/terms">
+                Terms & Conditions
+            </a>
+
+            <a href="/privacy">
+                Privacy Policy
+            </a>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<style>
+
+    .site-footer {
+        background: #222;
+        color: #fff;
+        padding: 60px 5% 20px;
+    }
+
+
+    .footer-container {
+        max-width: 1300px;
+        margin: auto;
+
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+
+        gap: 50px;
+    }
+
+
+    .footer-column {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+
+    .footer-brand h2 {
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+
+
+    .footer-brand p {
+        max-width: 280px;
+
+        color: #bbb;
+
+        font-size: 14px;
+
+        line-height: 1.6;
+    }
+
+
+    .footer-column h3 {
+        font-size: 15px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .footer-column a {
+        color: #aaa;
+
+        font-size: 13px;
+
+        text-decoration: none;
+
+        transition: color 0.2s ease;
+    }
+
+
+    .footer-column a:hover {
+        color: #fff;
+    }
+
+
+    .social-links {
+        display: flex;
+
+        gap: 15px;
+
+        margin-top: 10px;
+    }
+
+
+    .social-links a {
+        font-size: 12px;
+    }
+
+
+    .footer-bottom {
+        max-width: 1300px;
+
+        margin: 50px auto 0;
+
+        padding-top: 20px;
+
+        border-top: 1px solid #444;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 20px;
+    }
+
+
+    .footer-bottom p {
+        color: #888;
+
+        font-size: 12px;
+    }
+
+
+    .legal-links {
+        display: flex;
+
+        gap: 20px;
+    }
+
+
+    .legal-links a {
+        color: #888;
+
+        font-size: 12px;
+
+        text-decoration: none;
+    }
+
+
+    .legal-links a:hover {
+        color: #fff;
+    }
+
+
+    @media (max-width: 800px) {
+
+        .footer-container {
+            grid-template-columns: 1fr 1fr;
+        }
+
+
+        .footer-bottom {
+            flex-direction: column;
+
+            align-items: flex-start;
+        }
+
+    }
+
+
+    @media (max-width: 500px) {
+
+        .footer-container {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+</style>

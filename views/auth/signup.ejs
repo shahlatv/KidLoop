@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up | KidLoop</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .signup-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            min-height: 700px;
+            background: #ffffff;
+            display: flex;
+            border: 1px solid #e5e5e5;
+        }
+
+        /* IMAGE */
+
+        .image-section {
+            width: 42%;
+            overflow: hidden;
+        }
+
+        .image-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* FORM SECTION */
+
+        .form-section {
+            width: 58%;
+            display: flex;
+            flex-direction: column;
+            padding: 45px 70px 30px;
+        }
+
+        .brand {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 38px;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 45px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+        }
+
+        .signup-container h1 {
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 28px;
+            font-weight: 500;
+            text-align: center;
+            color: #333333;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777777;
+            font-size: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* FIELD */
+
+        .field {
+            margin-bottom: 13px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 11px;
+            color: #444444;
+            margin-bottom: 6px;
+        }
+
+        .field input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            padding: 0 13px;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: #333333;
+        }
+
+        .field-error {
+            display: block;
+            min-height: 15px;
+            margin-top: 4px;
+            font-size: 10px;
+            color: #c62828;
+        }
+
+        /* PASSWORD */
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 55px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #777777;
+            font-size: 12px;
+        }
+
+        /* SIGNUP BUTTON */
+
+        .signup-btn {
+            width: 100%;
+            height: 45px;
+            border: none;
+            border-radius: 7px;
+            background: #211f1b;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .signup-btn:hover {
+            background: #000000;
+        }
+
+        .signup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* GENERAL MESSAGE */
+
+        .message {
+            min-height: 20px;
+            margin-top: 12px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .error {
+            color: #c62828;
+        }
+
+        .success {
+            color: #2e7d32;
+        }
+
+        /* LOGIN */
+
+        .login-text {
+            text-align: center;
+            margin-top: 17px;
+            font-size: 11px;
+            color: #777777;
+        }
+
+        .login-text a {
+            color: #333333;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* TERMS */
+
+        .terms {
+            margin-top: auto;
+            text-align: right;
+            font-size: 9px;
+            color: #999999;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .signup-wrapper {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .image-section {
+                width: 100%;
+                height: 250px;
+            }
+
+            .form-section {
+                width: 100%;
+                padding: 35px 25px 25px;
+            }
+
+            .brand {
+                margin-bottom: 40px;
+            }
+
+            .terms {
+                margin-top: 40px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .image-section {
+                height: 210px;
+            }
+
+            .form-section {
+                padding: 30px 18px 20px;
+            }
+
+            .brand {
+                font-size: 32px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="signup-wrapper">
+
+        <!-- IMAGE -->
+
+        <div class="image-section">
+
+            <img
+                src="/images/otp-verification.jpg"
+                alt="KidLoop Kids"
+            >
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="form-section">
+
+            <div class="brand">
+                KidLoop
+            </div>
+
+
+            <div class="signup-container">
+
+                <h1>Create Account</h1>
+
+                <p class="subtitle">
+                    Join KidLoop and give pre-loved kids' items a new life
+                </p>
+
+
+                <form
+                    id="signupForm"
+                    novalidate
+                >
+
+                    <!-- NAME -->
+
+                    <div class="field">
+
+                        <label for="name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            autocomplete="name"
+                            maxlength="50"
+                        >
+
+                        <small
+                            id="nameError"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+
+                    <div class="field">
+
+                        <label for="email">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            maxlength="100"
+                        >
+
+                        <small
+                            id="emailError"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- PHONE -->
+
+                    <div class="field">
+
+                        <label for="phone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter 10-digit mobile number"
+                            autocomplete="tel"
+                            maxlength="10"
+                            inputmode="numeric"
+                        >
+
+                        <small
+                            id="phoneError"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+
+                    <div class="field">
+
+                        <label for="password">
+                            Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="Create a strong password"
+                                autocomplete="new-password"
+                                maxlength="50"
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                id="togglePassword"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                        <small
+                            id="passwordError"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- CONFIRM PASSWORD -->
+
+                    <div class="field">
+
+                        <label for="confirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <div class="password-wrapper">
+
+                            <input
+                                type="password"
+                                id="confirmPassword"
+                                placeholder="Re-enter your password"
+                                autocomplete="new-password"
+                                maxlength="50"
+                            >
+
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                id="toggleConfirmPassword"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                        <small
+                            id="confirmPasswordError"
+                            class="field-error"
+                        ></small>
+
+                    </div>
+
+
+                    <!-- SIGNUP -->
+
+                    <button
+                        type="submit"
+                        class="signup-btn"
+                        id="signupBtn"
+                    >
+                        CREATE ACCOUNT
+                    </button>
+
+                </form>
+
+
+                <!-- GENERAL MESSAGE -->
+
+                <p
+                    id="message"
+                    class="message"
+                ></p>
+
+
+                <!-- LOGIN -->
+
+                <p class="login-text">
+
+                    Already have an account?
+
+                    <a href="/auth/login">
+                        Login
+                    </a>
+
+                </p>
+
+            </div>
+
+
+            <div class="terms">
+                Terms & Conditions
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* ELEMENTS */
+
+        const signupForm =
+            document.getElementById("signupForm");
+
+        const nameInput =
+            document.getElementById("name");
+
+        const emailInput =
+            document.getElementById("email");
+
+        const phoneInput =
+            document.getElementById("phone");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const confirmPasswordInput =
+            document.getElementById("confirmPassword");
+
+        const signupBtn =
+            document.getElementById("signupBtn");
+
+        const message =
+            document.getElementById("message");
+
+        const nameError =
+            document.getElementById("nameError");
+
+        const emailError =
+            document.getElementById("emailError");
+
+        const phoneError =
+            document.getElementById("phoneError");
+
+        const passwordError =
+            document.getElementById("passwordError");
+
+        const confirmPasswordError =
+            document.getElementById(
+                "confirmPasswordError"
+            );
+
+
+        /* PASSWORD SHOW / HIDE */
+
+        const togglePassword =
+            document.getElementById(
+                "togglePassword"
+            );
+
+        const toggleConfirmPassword =
+            document.getElementById(
+                "toggleConfirmPassword"
+            );
+
+
+        togglePassword.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    passwordInput.type === "password"
+                ) {
+
+                    passwordInput.type = "text";
+
+                    togglePassword.textContent =
+                        "Hide";
+
+                } else {
+
+                    passwordInput.type = "password";
+
+                    togglePassword.textContent =
+                        "Show";
+
+                }
+
+            }
+        );
+
+
+        toggleConfirmPassword.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    confirmPasswordInput.type === "password"
+                ) {
+
+                    confirmPasswordInput.type = "text";
+
+                    toggleConfirmPassword.textContent =
+                        "Hide";
+
+                } else {
+
+                    confirmPasswordInput.type = "password";
+
+                    toggleConfirmPassword.textContent =
+                        "Show";
+
+                }
+
+            }
+        );
+
+
+        /* PHONE - ONLY NUMBERS */
+
+        phoneInput.addEventListener(
+            "input",
+            () => {
+
+                phoneInput.value =
+                    phoneInput.value.replace(/\D/g, "");
+
+                phoneError.textContent = "";
+
+            }
+        );
+
+
+        /* CLEAR ERRORS WHILE TYPING */
+
+        nameInput.addEventListener(
+            "input",
+            () => {
+
+                nameError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+            }
+        );
+
+
+        emailInput.addEventListener(
+            "input",
+            () => {
+
+                emailError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+            }
+        );
+
+
+        passwordInput.addEventListener(
+            "input",
+            () => {
+
+                passwordError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+            }
+        );
+
+
+        confirmPasswordInput.addEventListener(
+            "input",
+            () => {
+
+                confirmPasswordError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+            }
+        );
+
+
+        /* SIGNUP */
+
+        signupForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                /* CLEAR PREVIOUS ERRORS */
+
+                nameError.textContent = "";
+                emailError.textContent = "";
+                phoneError.textContent = "";
+                passwordError.textContent = "";
+                confirmPasswordError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+
+                /* VALUES */
+
+                const name =
+                    nameInput.value.trim();
+
+                const email =
+                    emailInput.value.trim().toLowerCase();
+
+                const phone =
+                    phoneInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+                const confirmPassword =
+                    confirmPasswordInput.value;
+
+
+                let isValid = true;
+
+
+                /* NAME */
+
+                if (!name) {
+
+                    nameError.textContent =
+                        "Name is required.";
+
+                    isValid = false;
+
+                } else if (
+                    name.length < 2
+                ) {
+
+                    nameError.textContent =
+                        "Name must contain at least 2 characters.";
+
+                    isValid = false;
+
+                } else if (
+                    name.length > 50
+                ) {
+
+                    nameError.textContent =
+                        "Name must not exceed 50 characters.";
+
+                    isValid = false;
+
+                } else if (
+                    !/^[A-Za-z]+(?:[ '.-][A-Za-z]+)*$/.test(
+                        name
+                    )
+                ) {
+
+                    nameError.textContent =
+                        "Please enter a valid name.";
+
+                    isValid = false;
+
+                }
+
+
+                /* EMAIL */
+
+                if (!email) {
+
+                    emailError.textContent =
+                        "Email is required.";
+
+                    isValid = false;
+
+                } else if (
+                    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                        email
+                    )
+                ) {
+
+                    emailError.textContent =
+                        "Please enter a valid email address.";
+
+                    isValid = false;
+
+                }
+
+
+                /* PHONE */
+
+                if (!phone) {
+
+                    phoneError.textContent =
+                        "Phone number is required.";
+
+                    isValid = false;
+
+                } else if (
+                    !/^[6-9]\d{9}$/.test(phone)
+                ) {
+
+                    phoneError.textContent =
+                        "Enter a valid 10-digit Indian mobile number.";
+
+                    isValid = false;
+
+                }
+
+
+                /* PASSWORD */
+
+                if (!password) {
+
+                    passwordError.textContent =
+                        "Password is required.";
+
+                    isValid = false;
+
+                } else if (
+                    password.trim().length === 0
+                ) {
+
+                    passwordError.textContent =
+                        "Password cannot contain only spaces.";
+
+                    isValid = false;
+
+                } else if (
+                    password.length < 8
+                ) {
+
+                    passwordError.textContent =
+                        "Password must contain at least 8 characters.";
+
+                    isValid = false;
+
+                } else if (
+                    !/[A-Z]/.test(password)
+                ) {
+
+                    passwordError.textContent =
+                        "Password must contain an uppercase letter.";
+
+                    isValid = false;
+
+                } else if (
+                    !/[a-z]/.test(password)
+                ) {
+
+                    passwordError.textContent =
+                        "Password must contain a lowercase letter.";
+
+                    isValid = false;
+
+                } else if (
+                    !/\d/.test(password)
+                ) {
+
+                    passwordError.textContent =
+                        "Password must contain a number.";
+
+                    isValid = false;
+
+                } else if (
+                    !/[@$!%*?&]/.test(password)
+                ) {
+
+                    passwordError.textContent =
+                        "Password must contain a special character.";
+
+                    isValid = false;
+
+                }
+
+
+                /* CONFIRM PASSWORD */
+
+                if (!confirmPassword) {
+
+                    confirmPasswordError.textContent =
+                        "Please confirm your password.";
+
+                    isValid = false;
+
+                } else if (
+                    password !== confirmPassword
+                ) {
+
+                    confirmPasswordError.textContent =
+                        "Passwords do not match.";
+
+                    isValid = false;
+
+                }
+
+
+                /* STOP IF INVALID */
+
+                if (!isValid) {
+                    return;
+                }
+
+
+                /* LOADING */
+
+                signupBtn.disabled = true;
+
+                signupBtn.textContent =
+                    "CREATING ACCOUNT...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/auth/signup",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    name,
+                                    email,
+                                    phone,
+                                    password,
+                                    confirmPassword
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    /* BACKEND ERROR */
+
+                    if (!data.success) {
+
+                        message.textContent =
+                            data.message ||
+                            "Unable to create account.";
+
+                        message.classList.add(
+                            "error"
+                        );
+
+                        signupBtn.disabled = false;
+
+                        signupBtn.textContent =
+                            "CREATE ACCOUNT";
+
+                        return;
+                    }
+
+
+                    /*
+                        Store email temporarily so
+                        OTP page can identify the
+                        signup account.
+                    */
+
+                    sessionStorage.setItem(
+                        "signupEmail",
+                        email
+                    );
+
+
+                    /*
+                        Signup backend has created
+                        the OTP and sent it by email.
+                    */
+
+                    window.location.href =
+                        "/auth/otp";
+
+
+                } catch (error) {
+
+                    message.textContent =
+                        "Something went wrong. Please try again.";
+
+                    message.classList.add(
+                        "error"
+                    );
+
+                    signupBtn.disabled = false;
+
+                    signupBtn.textContent =
+                        "CREATE ACCOUNT";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - KidLoop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f7fb;
+            color: #333;
+        }
+
+        .header {
+            background: #222;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            margin-bottom: 20px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+        }
+
+        .page-title p {
+            color: #777;
+            margin-top: 5px;
+        }
+
+        /* Search section */
+
+        .search-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-row input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .search-btn,
+        .clear-btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .search-btn {
+            background: #222;
+            color: white;
+        }
+
+        .clear-btn {
+            background: #ddd;
+            color: #333;
+        }
+
+        .search-btn:hover {
+            background: #444;
+        }
+
+        .clear-btn:hover {
+            background: #ccc;
+        }
+
+        /* Message */
+
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .message.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .message.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Table */
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f8f8;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .blocked {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .block-btn {
+            background: #f39c12;
+            color: white;
+        }
+
+        .unblock-btn {
+            background: #27ae60;
+            color: white;
+        }
+
+        .action-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Loading */
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        /* Pagination */
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            border: 1px solid #ddd;
+            background: white;
+            padding: 8px 13px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background: #eee;
+        }
+
+        .pagination button.active-page {
+            background: #222;
+            color: white;
+            border-color: #222;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            margin-top: 10px;
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 15px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            .search-row {
+                flex-direction: column;
+            }
+
+            th,
+            td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    <header class="header">
+
+        <h1>KidLoop Admin</h1>
+
+        <button
+            class="logout-btn"
+            onclick="logoutAdmin()"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <main class="container">
+
+        <!-- Page title -->
+
+        <div class="page-title">
+
+            <h2>User Management</h2>
+
+            <p>
+                Manage KidLoop users
+            </p>
+
+        </div>
+
+
+        <!-- Search -->
+
+        <div class="search-box">
+
+            <div class="search-row">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by name, email or phone..."
+                >
+
+                <button
+                    class="search-btn"
+                    onclick="searchUsers()"
+                >
+                    Search
+                </button>
+
+                <button
+                    class="clear-btn"
+                    onclick="clearSearch()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Message -->
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+
+        <!-- User table -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Name</th>
+
+                        <th>Email</th>
+
+                        <th>Phone</th>
+
+                        <th>Status</th>
+
+                        <th>Joined</th>
+
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="userTableBody">
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="loading"
+                        >
+                            Loading users...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Pagination -->
+
+        <div
+            id="pagination"
+            class="pagination"
+        ></div>
+
+        <div
+            id="pageInfo"
+            class="page-info"
+        ></div>
+
+    </main>
+
+
+    <script>
+
+        let currentPage = 1;
+
+        let currentSearch = "";
+
+        let totalPages = 1;
+
+
+        /*
+         * Load users from backend
+         */
+
+        async function loadUsers(page = 1) {
+
+            currentPage = page;
+
+            const tableBody =
+                document.getElementById("userTableBody");
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="loading">
+                        Loading users...
+                    </td>
+                </tr>
+            `;
+
+            try {
+
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: 5,
+                    search: currentSearch
+                });
+
+                const response = await fetch(
+                    `/admin/users?${params.toString()}`
+                );
+
+                const data = await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.message || "Unable to load users"
+                    );
+
+                }
+
+
+                displayUsers(data.users);
+
+                displayPagination(
+                    data.currentPage,
+                    data.totalPages
+                );
+
+                displayPageInfo(
+                    data.currentPage,
+                    data.totalPages,
+                    data.totalUsers
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="empty"
+                        >
+                            ${escapeHtml(error.message)}
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+
+        /*
+         * Display users
+         */
+
+        function displayUsers(users) {
+
+            const tableBody =
+                document.getElementById("userTableBody");
+
+
+            if (!users || users.length === 0) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="empty"
+                        >
+                            No users found.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            tableBody.innerHTML = users.map(
+                (user, index) => {
+
+                    const number =
+                        ((currentPage - 1) * 5) +
+                        index +
+                        1;
+
+
+                    const statusClass =
+                        user.isBlocked
+                            ? "blocked"
+                            : "active";
+
+
+                    const statusText =
+                        user.isBlocked
+                            ? "Blocked"
+                            : "Active";
+
+
+                    const actionClass =
+                        user.isBlocked
+                            ? "unblock-btn"
+                            : "block-btn";
+
+
+                    const actionText =
+                        user.isBlocked
+                            ? "Unblock"
+                            : "Block";
+
+
+                    const joinedDate =
+                        user.createdAt
+                            ? new Date(
+                                user.createdAt
+                              ).toLocaleDateString()
+                            : "-";
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+                                ${number}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(user.name || "-")}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(user.email || "-")}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(user.phone || "-")}
+                            </td>
+
+                            <td>
+
+                                <span
+                                    class="status ${statusClass}"
+                                >
+                                    ${statusText}
+                                </span>
+
+                            </td>
+
+                            <td>
+                                ${joinedDate}
+                            </td>
+
+                            <td>
+
+                                <button
+                                    class="action-btn ${actionClass}"
+                                    onclick="toggleUserBlock(
+                                        '${user._id}',
+                                        ${user.isBlocked}
+                                    )"
+                                >
+                                    ${actionText}
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            ).join("");
+
+        }
+
+
+        /*
+         * Search users
+         */
+
+        function searchUsers() {
+
+            currentSearch =
+                document
+                    .getElementById("searchInput")
+                    .value
+                    .trim();
+
+            currentPage = 1;
+
+            loadUsers(1);
+
+        }
+
+
+        /*
+         * Clear search
+         */
+
+        function clearSearch() {
+
+            document
+                .getElementById("searchInput")
+                .value = "";
+
+            currentSearch = "";
+
+            currentPage = 1;
+
+            loadUsers(1);
+
+        }
+
+
+        /*
+         * Allow Enter key for search
+         */
+
+        document
+            .getElementById("searchInput")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        searchUsers();
+
+                    }
+
+                }
+            );
+
+
+        /*
+         * Block / Unblock user
+         */
+
+        async function toggleUserBlock(
+            userId,
+            currentlyBlocked
+        ) {
+
+            const action =
+                currentlyBlocked
+                    ? "unblock"
+                    : "block";
+
+
+            const confirmation =
+                currentlyBlocked
+                    ? "Are you sure you want to unblock this user?"
+                    : "Are you sure you want to block this user?";
+
+
+            if (!confirm(confirmation)) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response = await fetch(
+                    `/admin/users/${userId}/block`,
+                    {
+                        method: "PATCH"
+                    }
+                );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!response.ok || !data.success) {
+
+                    throw new Error(
+                        data.message ||
+                        `Unable to ${action} user`
+                    );
+
+                }
+
+
+                showMessage(
+                    data.message ||
+                    `User ${action}ed successfully`,
+                    "success"
+                );
+
+
+                loadUsers(currentPage);
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    error.message,
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Pagination
+         */
+
+        function displayPagination(
+            page,
+            pages
+        ) {
+
+            const pagination =
+                document.getElementById(
+                    "pagination"
+                );
+
+
+            totalPages = pages || 1;
+
+
+            if (totalPages <= 1) {
+
+                pagination.innerHTML = "";
+
+                return;
+
+            }
+
+
+            let html = "";
+
+
+            html += `
+                <button
+                    onclick="loadUsers(${page - 1})"
+                    ${page === 1 ? "disabled" : ""}
+                >
+                    Previous
+                </button>
+            `;
+
+
+            for (
+                let i = 1;
+                i <= totalPages;
+                i++
+            ) {
+
+                html += `
+                    <button
+                        class="${
+                            i === page
+                                ? "active-page"
+                                : ""
+                        }"
+                        onclick="loadUsers(${i})"
+                    >
+                        ${i}
+                    </button>
+                `;
+
+            }
+
+
+            html += `
+                <button
+                    onclick="loadUsers(${page + 1})"
+                    ${
+                        page === totalPages
+                            ? "disabled"
+                            : ""
+                    }
+                >
+                    Next
+                </button>
+            `;
+
+
+            pagination.innerHTML = html;
+
+        }
+
+
+        /*
+         * Page information
+         */
+
+        function displayPageInfo(
+            page,
+            pages,
+            totalUsers
+        ) {
+
+            const pageInfo =
+                document.getElementById(
+                    "pageInfo"
+                );
+
+
+            if (!totalUsers) {
+
+                pageInfo.textContent =
+                    "No users found";
+
+                return;
+
+            }
+
+
+            pageInfo.textContent =
+                `Page ${page} of ${pages} • ${totalUsers} total users`;
+
+        }
+
+
+        /*
+         * Show message
+         */
+
+        function showMessage(
+            message,
+            type
+        ) {
+
+            const messageBox =
+                document.getElementById(
+                    "message"
+                );
+
+
+            messageBox.textContent = message;
+
+            messageBox.className =
+                `message ${type}`;
+
+
+            setTimeout(() => {
+
+                messageBox.className =
+                    "message";
+
+                messageBox.textContent = "";
+
+            }, 3000);
+
+        }
+
+
+        /*
+         * Logout admin
+         */
+
+        async function logoutAdmin() {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to logout?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/admin/logout",
+                        {
+                            method: "POST"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (data.success) {
+
+                    window.location.href =
+                        "/admin/login";
+
+                } else {
+
+                    showMessage(
+                        data.message ||
+                        "Logout failed",
+                        "error"
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Unable to logout",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /*
+         * Prevent HTML injection
+         */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        /*
+         * Load users when page opens
+         */
+
+        loadUsers();
+
+    </script>
+
+</body>
+</html>

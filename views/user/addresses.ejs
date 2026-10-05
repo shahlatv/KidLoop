@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>My Addresses | KidLoop</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #fafafa;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        /* =========================
+           PAGE
+        ========================= */
+
+        .address-page {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 25px;
+        }
+
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            color: #777;
+        }
+
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+            display: none;
+            padding: 14px 18px;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .success-message {
+            background: #edf7ed;
+            border: 1px solid #c8e6c9;
+            color: #287d2f;
+        }
+
+        .error-message {
+            background: #fff0f0;
+            border: 1px solid #f0b5b5;
+            color: #c62828;
+        }
+
+
+        /* =========================
+           ADD BUTTON
+        ========================= */
+
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 25px;
+        }
+
+        .add-button {
+            border: none;
+            background: #222;
+            color: white;
+            padding: 13px 22px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .add-button:hover {
+            background: #000;
+        }
+
+
+        /* =========================
+           ADDRESS GRID
+        ========================= */
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+
+        .address-card {
+            background: white;
+            border: 1px solid #e5e5e5;
+            padding: 25px;
+            position: relative;
+        }
+
+
+        .address-card.default {
+            border-color: #333;
+        }
+
+
+        .address-type {
+            display: inline-block;
+            padding: 5px 10px;
+            background: #f2f2f2;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+
+        .default-label {
+            display: inline-block;
+            margin-left: 6px;
+            padding: 5px 10px;
+            background: #222;
+            color: white;
+            font-size: 10px;
+        }
+
+
+        .address-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+
+        .address-card p {
+            font-size: 13px;
+            line-height: 1.7;
+            color: #666;
+        }
+
+
+        .address-actions {
+            display: flex;
+            gap: 18px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+
+        .address-actions button {
+            border: none;
+            background: none;
+            text-decoration: underline;
+            font-size: 12px;
+            cursor: pointer;
+            color: #333;
+        }
+
+
+        .address-actions button.delete {
+            color: #c62828;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty-state {
+            display: none;
+            background: white;
+            border: 1px solid #e5e5e5;
+            padding: 60px 30px;
+            text-align: center;
+        }
+
+
+        .empty-state .icon {
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+
+        .empty-state h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+
+        .empty-state p {
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+
+        .modal {
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
+            padding: 35px;
+        }
+
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+
+        .modal-header h2 {
+            font-size: 22px;
+        }
+
+
+        .close-button {
+            border: none;
+            background: none;
+            font-size: 25px;
+            cursor: pointer;
+            color: #777;
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid #d5d5d5;
+            outline: none;
+            font-size: 13px;
+            background: white;
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #333;
+        }
+
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+
+        .field-error {
+            display: none;
+            margin-top: 5px;
+            color: #d93025;
+            font-size: 11px;
+        }
+
+
+        .default-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: 5px;
+            font-size: 13px;
+        }
+
+
+        .default-checkbox input {
+            width: auto;
+        }
+
+
+        /* =========================
+           MODAL BUTTONS
+        ========================= */
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+
+        .cancel-button {
+            background: #eeeeee;
+            color: #333;
+        }
+
+
+        .save-button {
+            background: #222;
+            color: white;
+        }
+
+
+        .save-button:hover {
+            background: #000;
+        }
+
+
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 750px) {
+
+            .address-page {
+                margin: 30px auto;
+                padding: 0 15px;
+            }
+
+            .address-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 500px) {
+
+            .modal {
+                padding: 25px 20px;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <%- include("../partials/topbar") %>
+
+    <%- include("../partials/navbar") %>
+
+
+    <main class="address-page">
+
+
+        <div class="page-header">
+
+            <h1>
+                My Addresses
+            </h1>
+
+            <p>
+                Manage your saved delivery addresses.
+            </p>
+
+        </div>
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="successMessage"
+            class="message success-message">
+        </div>
+
+
+        <div
+            id="errorMessage"
+            class="message error-message">
+        </div>
+
+
+        <!-- ADD BUTTON -->
+
+        <div class="top-actions">
+
+            <button
+                type="button"
+                class="add-button"
+                id="addAddressButton">
+
+                + Add New Address
+
+            </button>
+
+        </div>
+
+
+        <!-- ADDRESS LIST -->
+
+        <div
+            id="addressGrid"
+            class="address-grid">
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+            id="emptyState"
+            class="empty-state">
+
+            <div class="icon">
+                📍
+            </div>
+
+            <h2>
+                No saved addresses
+            </h2>
+
+            <p>
+                Add an address to make your checkout faster.
+            </p>
+
+            <button
+                type="button"
+                class="add-button"
+                id="emptyAddButton">
+
+                Add Address
+
+            </button>
+
+        </div>
+
+
+    </main>
+
+
+    <!-- =========================
+         ADDRESS MODAL
+    ========================== -->
+
+    <div
+        id="addressModal"
+        class="modal-overlay">
+
+
+        <div class="modal">
+
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    Add New Address
+                </h2>
+
+
+                <button
+                    type="button"
+                    class="close-button"
+                    id="closeModal">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="modalError"
+                class="message error-message">
+            </div>
+
+
+            <form id="addressForm">
+
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Enter full name"
+                    >
+
+                    <div
+                        id="fullNameError"
+                        class="field-error">
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        maxlength="10"
+                        placeholder="Enter 10-digit phone number"
+                    >
+
+                    <div
+                        id="phoneError"
+                        class="field-error">
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="addressLine">
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="addressLine"
+                        placeholder="House / Building / Street"
+                    >
+
+                    <div
+                        id="addressLineError"
+                        class="field-error">
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="city">
+                            City
+                        </label>
+
+                        <input
+                            type="text"
+                            id="city"
+                            placeholder="City"
+                        >
+
+                        <div
+                            id="cityError"
+                            class="field-error">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="state">
+                            State
+                        </label>
+
+                        <input
+                            type="text"
+                            id="state"
+                            placeholder="State"
+                        >
+
+                        <div
+                            id="stateError"
+                            class="field-error">
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="pincode">
+                            Pincode
+                        </label>
+
+                        <input
+                            type="text"
+                            id="pincode"
+                            maxlength="6"
+                            placeholder="6-digit pincode"
+                        >
+
+                        <div
+                            id="pincodeError"
+                            class="field-error">
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="addressType">
+                            Address Type
+                        </label>
+
+                        <select id="addressType">
+
+                            <option value="Home">
+                                Home
+                            </option>
+
+                            <option value="Work">
+                                Work
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <label class="default-checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="isDefault">
+
+                    Set as default address
+
+                </label>
+
+
+                <div class="modal-buttons">
+
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        id="cancelModal">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                        id="saveAddressButton">
+
+                        Save Address
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <%- include("../partials/footer") %>
+
+
+    <script>
+
+
+        /* =====================================
+           ELEMENTS
+        ===================================== */
+
+        const addressGrid =
+            document.getElementById(
+                "addressGrid"
+            );
+
+
+        const emptyState =
+            document.getElementById(
+                "emptyState"
+            );
+
+
+        const addressModal =
+            document.getElementById(
+                "addressModal"
+            );
+
+
+        const addressForm =
+            document.getElementById(
+                "addressForm"
+            );
+
+
+        const modalTitle =
+            document.getElementById(
+                "modalTitle"
+            );
+
+
+        const saveAddressButton =
+            document.getElementById(
+                "saveAddressButton"
+            );
+
+
+        const successMessage =
+            document.getElementById(
+                "successMessage"
+            );
+
+
+        const errorMessage =
+            document.getElementById(
+                "errorMessage"
+            );
+
+
+        const modalError =
+            document.getElementById(
+                "modalError"
+            );
+
+
+        let editingAddressId = null;
+
+
+        /* =====================================
+           FORM ELEMENTS
+        ===================================== */
+
+        const fullName =
+            document.getElementById(
+                "fullName"
+            );
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            );
+
+
+        const addressLine =
+            document.getElementById(
+                "addressLine"
+            );
+
+
+        const city =
+            document.getElementById(
+                "city"
+            );
+
+
+        const state =
+            document.getElementById(
+                "state"
+            );
+
+
+        const pincode =
+            document.getElementById(
+                "pincode"
+            );
+
+
+        const addressType =
+            document.getElementById(
+                "addressType"
+            );
+
+
+        const isDefault =
+            document.getElementById(
+                "isDefault"
+            );
+
+
+        /* =====================================
+           SHOW MESSAGE
+        ===================================== */
+
+        function showSuccess(message) {
+
+            successMessage.textContent =
+                message;
+
+            successMessage.style.display =
+                "block";
+
+
+            errorMessage.style.display =
+                "none";
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        function showError(message) {
+
+            errorMessage.textContent =
+                message;
+
+            errorMessage.style.display =
+                "block";
+
+
+            successMessage.style.display =
+                "none";
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =====================================
+           ESCAPE HTML
+        ===================================== */
+
+        function escapeHtml(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+                return "";
+            }
+
+
+            return String(value)
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /* =====================================
+           LOAD ADDRESSES
+        ===================================== */
+
+        async function loadAddresses() {
+
+            addressGrid.innerHTML =
+                "";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/user/addresses"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load addresses."
+                    );
+
+                }
+
+
+                const addresses =
+                    data.addresses || [];
+
+
+                if (addresses.length === 0) {
+
+                    addressGrid.style.display =
+                        "none";
+
+                    emptyState.style.display =
+                        "block";
+
+                    return;
+
+                }
+
+
+                emptyState.style.display =
+                    "none";
+
+                addressGrid.style.display =
+                    "grid";
+
+
+                addresses.forEach(
+                    address => {
+
+                        const card =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        card.className =
+                            "address-card" +
+                            (
+                                address.isDefault
+                                    ? " default"
+                                    : ""
+                            );
+
+
+                        card.innerHTML = `
+
+                            <div>
+
+                                <span class="address-type">
+
+                                    ${escapeHtml(
+                                        address.addressType ||
+                                        "Home"
+                                    )}
+
+                                </span>
+
+                                ${
+                                    address.isDefault
+                                        ? `
+                                            <span class="default-label">
+                                                DEFAULT
+                                            </span>
+                                          `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            <h3>
+                                ${escapeHtml(
+                                    address.fullName
+                                )}
+                            </h3>
+
+
+                            <p>
+
+                                <strong>
+                                    Phone:
+                                </strong>
+
+                                ${escapeHtml(
+                                    address.phone
+                                )}
+
+                                <br>
+
+                                ${escapeHtml(
+                                    address.addressLine
+                                )}
+
+                                <br>
+
+                                ${escapeHtml(
+                                    address.city
+                                )},
+
+                                ${escapeHtml(
+                                    address.state
+                                )}
+
+                                -
+
+                                ${escapeHtml(
+                                    address.pincode
+                                )}
+
+                            </p>
+
+
+                            <div class="address-actions">
+
+                                <button
+                                    type="button"
+                                    onclick="editAddress('${address._id}')">
+
+                                    Edit
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="delete"
+                                    onclick="deleteAddress('${address._id}')">
+
+                                    Delete
+
+                                </button>
+
+                            </div>
+
+                        `;
+
+
+                        addressGrid.appendChild(
+                            card
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Load addresses error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to load addresses."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================
+           OPEN ADD MODAL
+        ===================================== */
+
+        function openAddModal() {
+
+            editingAddressId =
+                null;
+
+
+            modalTitle.textContent =
+                "Add New Address";
+
+
+            saveAddressButton.textContent =
+                "Save Address";
+
+
+            addressForm.reset();
+
+
+            clearFieldErrors();
+
+
+            modalError.style.display =
+                "none";
+
+
+            addressModal.style.display =
+                "flex";
+
+        }
+
+
+        /* =====================================
+           OPEN EDIT MODAL
+        ===================================== */
+
+        async function editAddress(id) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/user/addresses"
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load address."
+                    );
+
+                }
+
+
+                const address =
+                    (data.addresses || [])
+                        .find(
+                            item =>
+                                item._id === id
+                        );
+
+
+                if (!address) {
+
+                    showError(
+                        "Address not found."
+                    );
+
+                    return;
+
+                }
+
+
+                editingAddressId =
+                    id;
+
+
+                modalTitle.textContent =
+                    "Edit Address";
+
+
+                saveAddressButton.textContent =
+                    "Update Address";
+
+
+                fullName.value =
+                    address.fullName || "";
+
+
+                phone.value =
+                    address.phone || "";
+
+
+                addressLine.value =
+                    address.addressLine || "";
+
+
+                city.value =
+                    address.city || "";
+
+
+                state.value =
+                    address.state || "";
+
+
+                pincode.value =
+                    address.pincode || "";
+
+
+                addressType.value =
+                    address.addressType ||
+                    "Home";
+
+
+                isDefault.checked =
+                    !!address.isDefault;
+
+
+                clearFieldErrors();
+
+
+                modalError.style.display =
+                    "none";
+
+
+                addressModal.style.display =
+                    "flex";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Edit address error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to edit address."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================
+           DELETE ADDRESS
+        ===================================== */
+
+        async function deleteAddress(id) {
+
+            const confirmed =
+                confirm(
+                    "Are you sure you want to delete this address?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/user/addresses/${id}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to delete address."
+                    );
+
+                }
+
+
+                showSuccess(
+                    "Address deleted successfully."
+                );
+
+
+                await loadAddresses();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Delete address error:",
+                    error
+                );
+
+
+                showError(
+                    error.message ||
+                    "Unable to delete address."
+                );
+
+            }
+
+        }
+
+
+        /* =====================================
+           CLEAR FIELD ERRORS
+        ===================================== */
+
+        function clearFieldErrors() {
+
+            document
+                .querySelectorAll(
+                    ".field-error"
+                )
+                .forEach(
+                    element => {
+
+                        element.textContent =
+                            "";
+
+                        element.style.display =
+                            "none";
+
+                    }
+                );
+
+        }
+
+
+        /* =====================================
+           VALIDATE FORM
+        ===================================== */
+
+        function validateForm() {
+
+            clearFieldErrors();
+
+
+            let valid = true;
+
+
+            const nameValue =
+                fullName.value.trim();
+
+
+            const phoneValue =
+                phone.value.trim();
+
+
+            const addressValue =
+                addressLine.value.trim();
+
+
+            const cityValue =
+                city.value.trim();
+
+
+            const stateValue =
+                state.value.trim();
+
+
+            const pincodeValue =
+                pincode.value.trim();
+
+
+            if (!nameValue) {
+
+                showFieldError(
+                    "fullNameError",
+                    "Full name is required."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (
+                !/^[6-9]\d{9}$/.test(
+                    phoneValue
+                )
+            ) {
+
+                showFieldError(
+                    "phoneError",
+                    "Enter a valid 10-digit phone number."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (!addressValue) {
+
+                showFieldError(
+                    "addressLineError",
+                    "Address is required."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (!cityValue) {
+
+                showFieldError(
+                    "cityError",
+                    "City is required."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (!stateValue) {
+
+                showFieldError(
+                    "stateError",
+                    "State is required."
+                );
+
+                valid = false;
+
+            }
+
+
+            if (
+                !/^\d{6}$/.test(
+                    pincodeValue
+                )
+            ) {
+
+                showFieldError(
+                    "pincodeError",
+                    "Enter a valid 6-digit pincode."
+                );
+
+                valid = false;
+
+            }
+
+
+            return valid;
+
+        }
+
+
+        function showFieldError(
+            id,
+            message
+        ) {
+
+            const element =
+                document.getElementById(id);
+
+
+            element.textContent =
+                message;
+
+
+            element.style.display =
+                "block";
+
+        }
+
+
+        /* =====================================
+           SAVE / UPDATE ADDRESS
+        ===================================== */
+
+        addressForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+
+                if (!validateForm()) {
+                    return;
+                }
+
+
+                saveAddressButton.textContent =
+                    editingAddressId
+                        ? "Updating..."
+                        : "Saving...";
+
+
+                saveAddressButton.classList.add(
+                    "loading"
+                );
+
+
+                const addressData = {
+
+                    fullName:
+                        fullName.value.trim(),
+
+                    phone:
+                        phone.value.trim(),
+
+                    addressLine:
+                        addressLine.value.trim(),
+
+                    city:
+                        city.value.trim(),
+
+                    state:
+                        state.value.trim(),
+
+                    pincode:
+                        pincode.value.trim(),
+
+                    addressType:
+                        addressType.value,
+
+                    isDefault:
+                        isDefault.checked
+
+                };
+
+
+                try {
+
+                    let response;
+
+
+                    if (editingAddressId) {
+
+                        response =
+                            await fetch(
+                                `/user/addresses/${editingAddressId}`,
+                                {
+                                    method: "PUT",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify(
+                                            addressData
+                                        )
+                                }
+                            );
+
+                    } else {
+
+                        response =
+                            await fetch(
+                                "/user/addresses",
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify(
+                                            addressData
+                                        )
+                                }
+                            );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Unable to save address."
+                        );
+
+                    }
+
+
+                    closeModal();
+
+
+                    showSuccess(
+                        editingAddressId
+                            ? "Address updated successfully."
+                            : "Address added successfully."
+                    );
+
+
+                    await loadAddresses();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Save address error:",
+                        error
+                    );
+
+
+                    modalError.textContent =
+                        error.message ||
+                        "Unable to save address.";
+
+
+                    modalError.style.display =
+                        "block";
+
+
+                } finally {
+
+                    saveAddressButton.classList.remove(
+                        "loading"
+                    );
+
+
+                    saveAddressButton.textContent =
+                        editingAddressId
+                            ? "Update Address"
+                            : "Save Address";
+
+                }
+
+            }
+        );
+
+
+        /* =====================================
+           CLOSE MODAL
+        ===================================== */
+
+        function closeModal() {
+
+            addressModal.style.display =
+                "none";
+
+
+            addressForm.reset();
+
+
+            editingAddressId =
+                null;
+
+
+            clearFieldErrors();
+
+        }
+
+
+        document
+            .getElementById("closeModal")
+            .addEventListener(
+                "click",
+                closeModal
+            );
+
+
+        document
+            .getElementById("cancelModal")
+            .addEventListener(
+                "click",
+                closeModal
+            );
+
+
+        /* =====================================
+           ADD BUTTONS
+        ===================================== */
+
+        document
+            .getElementById(
+                "addAddressButton"
+            )
+            .addEventListener(
+                "click",
+                openAddModal
+            );
+
+
+        document
+            .getElementById(
+                "emptyAddButton"
+            )
+            .addEventListener(
+                "click",
+                openAddModal
+            );
+
+
+        /* =====================================
+           CLOSE MODAL WHEN CLICKING OUTSIDE
+        ===================================== */
+
+        addressModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target ===
+                    addressModal
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+
+        /* =====================================
+           INITIAL LOAD
+        ===================================== */
+
+        loadAddresses();
+
+    </script>
+
+
+</body>
+
+</html>

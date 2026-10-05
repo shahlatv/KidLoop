@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | KidLoop</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #fff7f1,
+                    #f7f3ff
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 950px;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 45px rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* LEFT SIDE */
+
+        .welcome-section {
+            padding: 55px 45px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffe8dc,
+                    #f0e7ff
+                );
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .brand {
+            font-size: 38px;
+            font-weight: 800;
+
+            color: #2b2b2b;
+
+            margin-bottom: 12px;
+        }
+
+        .brand span {
+            color: #e88778;
+        }
+
+        .welcome-section h2 {
+            font-size: 30px;
+            line-height: 1.25;
+
+            color: #333;
+
+            margin-bottom: 15px;
+        }
+
+        .welcome-section p {
+            color: #666;
+
+            line-height: 1.7;
+
+            font-size: 15px;
+
+            max-width: 360px;
+        }
+
+        .decorations {
+            margin-top: 35px;
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+        .circle {
+            width: 55px;
+            height: 55px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+
+            background: rgba(255,255,255,0.7);
+        }
+
+
+        /* RIGHT SIDE */
+
+        .login-section {
+            padding: 55px 45px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-title {
+            margin-bottom: 28px;
+        }
+
+        .login-title h1 {
+            font-size: 28px;
+
+            color: #292929;
+
+            margin-bottom: 7px;
+        }
+
+        .login-title p {
+            color: #777;
+
+            font-size: 14px;
+        }
+
+
+        /* MESSAGE */
+
+        .message {
+            display: none;
+
+            padding: 12px 14px;
+
+            border-radius: 8px;
+
+            margin-bottom: 18px;
+
+            font-size: 14px;
+        }
+
+        .message.error {
+            display: block;
+
+            background: #fff0f0;
+
+            color: #c0392b;
+
+            border: 1px solid #ffd0d0;
+        }
+
+        .message.success {
+            display: block;
+
+            background: #eefaf1;
+
+            color: #218838;
+
+            border: 1px solid #c8e8d0;
+        }
+
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #333;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+
+            padding: 13px 45px 13px 14px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #e88778;
+
+            box-shadow:
+                0 0 0 3px rgba(
+                    232,
+                    135,
+                    120,
+                    0.12
+                );
+        }
+
+
+        /* SHOW PASSWORD */
+
+        .show-password {
+            position: absolute;
+
+            right: 12px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: none;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            color: #777;
+
+            padding: 4px;
+        }
+
+        .show-password:hover {
+            color: #333;
+        }
+
+
+        /* FORGOT PASSWORD */
+
+        .forgot-password {
+            display: block;
+
+            text-align: right;
+
+            margin-top: -8px;
+            margin-bottom: 20px;
+
+            color: #777;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+        .forgot-password:hover {
+            color: #333;
+
+            text-decoration: underline;
+        }
+
+
+        /* LOGIN BUTTON */
+
+        .login-btn {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #e88778,
+                    #d96f82
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-1px);
+
+            box-shadow:
+                0 7px 18px rgba(
+                    217,
+                    111,
+                    130,
+                    0.25
+                );
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* GOOGLE DIVIDER */
+
+        .google-divider {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            margin: 22px 0;
+
+            color: #999;
+
+            font-size: 12px;
+        }
+
+        .google-divider::before,
+        .google-divider::after {
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: #ddd;
+        }
+
+
+        /* GOOGLE BUTTON */
+
+        .google-login-btn {
+            width: 100%;
+
+            padding: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 9px;
+
+            background: white;
+
+            color: #333;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .google-login-btn:hover {
+            background: #f8f8f8;
+
+            border-color: #bbb;
+
+            transform: translateY(-1px);
+        }
+
+        .google-icon {
+            width: 22px;
+            height: 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #4285f4;
+        }
+
+
+        /* SIGNUP */
+
+        .signup-text {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #777;
+
+            font-size: 13px;
+        }
+
+        .signup-text a {
+            color: #333;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* RESPONSIVE */
+
+        @media (max-width: 750px) {
+
+            .login-wrapper {
+                grid-template-columns: 1fr;
+
+                max-width: 450px;
+            }
+
+            .welcome-section {
+                padding: 35px;
+
+                text-align: center;
+            }
+
+            .welcome-section p {
+                margin: auto;
+            }
+
+            .decorations {
+                justify-content: center;
+            }
+
+            .login-section {
+                padding: 40px 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-wrapper">
+
+
+        <!-- LEFT SIDE -->
+
+        <section class="welcome-section">
+
+            <div class="brand">
+                Kid<span>Loop</span>
+            </div>
+
+            <h2>
+                Welcome Back! 👋
+            </h2>
+
+            <p>
+                Sign in to continue your KidLoop
+                shopping journey and discover
+                cute styles for little ones.
+            </p>
+
+            <div class="decorations">
+
+                <div class="circle">🧸</div>
+
+                <div class="circle">👕</div>
+
+                <div class="circle">🎀</div>
+
+                <div class="circle">✨</div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="login-section">
+
+
+            <div class="login-title">
+
+                <h1>
+                    Sign In
+                </h1>
+
+                <p>
+                    Enter your account details to continue.
+                </p>
+
+            </div>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+
+            <!-- LOGIN FORM -->
+
+            <form id="loginForm">
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="togglePassword"
+                            title="Show password"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORGOT PASSWORD -->
+
+                <a
+                    href="/auth/forgot-password"
+                    class="forgot-password"
+                >
+                    Forgot Password?
+                </a>
+
+
+                <!-- LOGIN -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginBtn"
+                >
+                    Sign In
+                </button>
+
+
+            </form>
+
+
+            <!-- GOOGLE -->
+
+            <div class="google-divider">
+                <span>OR</span>
+            </div>
+
+
+            <a
+                href="/auth/google"
+                class="google-login-btn"
+            >
+
+                <span class="google-icon">
+                    G
+                </span>
+
+                Continue with Google
+
+            </a>
+
+
+            <!-- SIGN UP -->
+
+            <p class="signup-text">
+
+                Don't have an account?
+
+                <a href="/auth/signup">
+                    Sign Up
+                </a>
+
+            </p>
+
+
+        </section>
+
+    </div>
+
+
+    <script>
+
+
+        const form =
+            document.getElementById(
+                "loginForm"
+            );
+
+
+        const emailInput =
+            document.getElementById(
+                "email"
+            );
+
+
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+
+        const loginBtn =
+            document.getElementById(
+                "loginBtn"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const togglePassword =
+            document.getElementById(
+                "togglePassword"
+            );
+
+
+        /*
+         * Show / Hide Password
+         */
+
+        togglePassword.addEventListener(
+            "click",
+            function() {
+
+                if (
+                    passwordInput.type ===
+                    "password"
+                ) {
+
+                    passwordInput.type =
+                        "text";
+
+                    togglePassword.textContent =
+                        "🙈";
+
+                    togglePassword.title =
+                        "Hide password";
+
+                } else {
+
+                    passwordInput.type =
+                        "password";
+
+                    togglePassword.textContent =
+                        "👁";
+
+                    togglePassword.title =
+                        "Show password";
+
+                }
+
+            }
+        );
+
+
+        /*
+         * Show Message
+         */
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent = text;
+
+            message.className =
+                `message ${type}`;
+
+        }
+
+
+        /*
+         * Login
+         */
+
+        form.addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const email =
+                    emailInput.value
+                        .trim()
+                        .toLowerCase();
+
+
+                const password =
+                    passwordInput.value;
+
+
+                /*
+                 * Validation
+                 */
+
+                if (!email) {
+
+                    showMessage(
+                        "Please enter your email.",
+                        "error"
+                    );
+
+                    emailInput.focus();
+
+                    return;
+
+                }
+
+
+                const emailPattern =
+                    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+                if (
+                    !emailPattern.test(email)
+                ) {
+
+                    showMessage(
+                        "Please enter a valid email address.",
+                        "error"
+                    );
+
+                    emailInput.focus();
+
+                    return;
+
+                }
+
+
+                if (!password) {
+
+                    showMessage(
+                        "Please enter your password.",
+                        "error"
+                    );
+
+                    passwordInput.focus();
+
+                    return;
+
+                }
+
+
+                loginBtn.disabled = true;
+
+                loginBtn.textContent =
+                    "Signing in...";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/auth/login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    email,
+                                    password
+                                })
+                            }
+                        );
+
+
+                    const data =
+                        await response.json();
+
+
+                    if (
+                        !response.ok ||
+                        !data.success
+                    ) {
+
+                        throw new Error(
+                            data.message ||
+                            "Login failed."
+                        );
+
+                    }
+
+
+                    showMessage(
+                        "Login successful! Redirecting...",
+                        "success"
+                    );
+
+
+                    setTimeout(
+                        function() {
+
+                            window.location.href =
+                                "/";
+
+                        },
+                        700
+                    );
+
+
+                } catch (error) {
+
+                    console.error(error);
+
+
+                    showMessage(
+                        error.message,
+                        "error"
+                    );
+
+
+                    loginBtn.disabled = false;
+
+                    loginBtn.textContent =
+                        "Sign In";
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
