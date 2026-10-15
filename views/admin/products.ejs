@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Product Management | KidLoop</title>
+
+    <link rel="stylesheet" href="/css/admin/sidebar.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F8F6FA;
+            color: #30243F;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #30243F;
+        }
+
+        .page-header p {
+            margin: 8px 0 0;
+            color: #756482;
+        }
+
+        .card {
+            background: #FFFFFF;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(48, 36, 63, 0.07);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #D8D0E0;
+            border-radius: 7px;
+            font-size: 14px;
+            background: #FFFFFF;
+            color: #30243F;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #756482;
+            box-shadow: 0 0 0 2px rgba(117, 100, 130, 0.12);
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .primary-btn {
+            background: #62516F;
+            color: #FFFFFF;
+        }
+
+        .primary-btn:hover {
+            background: #756482;
+        }
+
+        .secondary-btn {
+            background: #EDE5F7;
+            color: #30243F;
+        }
+
+        .secondary-btn:hover {
+            background: #E2D9E8;
+        }
+
+        .warning-btn {
+            background: #FFF0D6;
+            color: #805B12;
+        }
+
+        .danger-btn {
+            background: #FCE7E5;
+            color: #A83232;
+        }
+
+        .success-message {
+            background: #E5F6E9;
+            color: #246B37;
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #FCE7E5;
+            color: #A83232;
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #EEE8F2;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #F5F0F8;
+            color: #62516F;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .product-name {
+            font-weight: 600;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .listed {
+            background: #E5F6E9;
+            color: #246B37;
+        }
+
+        .unlisted {
+            background: #FFF0D6;
+            color: #805B12;
+        }
+
+        .archived {
+            background: #FCE7E5;
+            color: #A83232;
+        }
+
+        .actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .actions .btn {
+            padding: 8px 10px;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #756482;
+        }
+
+        .form-note {
+            color: #756482;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .main-content {
+                padding: 14px;
+            }
+
+            .card {
+                padding: 18px;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/admin/sidebar", { activePage: "products" }) %>
+
+    <main class="main-content">
+
+        <div class="page-header">
+            <div>
+                <h1>Product Management</h1>
+                <p>Manage your products and their availability.</p>
+            </div>
+        </div>
+
+        <% if (success) { %>
+            <div class="success-message" id="successMessage">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- ADD PRODUCT FORM -->
+
+        <section class="card" id="productFormCard">
+
+            <h2 id="formTitle">Add New Product</h2>
+
+            <form
+                id="productForm"
+                action="/admin/products"
+                method="POST"
+            >
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="name">Product Name *</label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            maxlength="150"
+                            required
+                            placeholder="Example: Girls Floral Dress"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category *</label>
+
+                        <select
+                            id="category"
+                            name="category"
+                            required
+                        >
+                            <option value="">Select a category</option>
+
+                            <% categories.forEach(category => { %>
+                                <option value="<%= category._id %>">
+                                    <%= category.name %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Price (₹) *</label>
+
+                        <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            min="0"
+                            step="0.01"
+                            required
+                            placeholder="Example: 799"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="discount">Discount (%)</label>
+
+                        <input
+                            type="number"
+                            id="discount"
+                            name="discount"
+                            min="0"
+                            max="100"
+                            step="0.01"
+                            value="0"
+                        >
+
+                        <span class="form-note">
+                            Enter a value between 0 and 100.
+                        </span>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="description">Description *</label>
+
+                        <textarea
+                            id="description"
+                            name="description"
+                            required
+                            placeholder="Describe the product..."
+                        ></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="highlights">Product Highlights</label>
+
+                        <textarea
+                            id="highlights"
+                            name="highlights"
+                            placeholder="Example: Soft cotton&#10;Comfortable fit&#10;Machine washable"
+                        ></textarea>
+
+                        <span class="form-note">
+                            Enter one highlight per line.
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="button-row">
+
+                    <button
+                        type="submit"
+                        class="btn primary-btn"
+                        id="submitButton"
+                    >
+                        Save Product
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn secondary-btn"
+                        id="cancelEditButton"
+                        hidden
+                    >
+                        Cancel Edit
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- PRODUCT LIST -->
+
+        <section class="card">
+
+            <h2>All Products</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (products.length === 0) { %>
+
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    No products found. Add your first product above.
+                                </td>
+                            </tr>
+
+                        <% } else { %>
+
+                            <% products.forEach(product => { %>
+
+                                <tr>
+
+                                    <td class="product-name">
+                                        <%= product.name %>
+                                    </td>
+
+                                    <td>
+                                        <%= product.category
+                                            ? product.category.name
+                                            : "Category unavailable" %>
+                                    </td>
+
+                                    <td>
+                                        ₹<%= Number(product.price).toFixed(2) %>
+                                    </td>
+
+                                    <td>
+                                        <%= product.discount || 0 %>%
+                                    </td>
+
+                                    <td>
+                                        <% if (product.isDeleted) { %>
+
+                                            <span class="status archived">
+                                                Archived
+                                            </span>
+
+                                        <% } else if (product.isListed) { %>
+
+                                            <span class="status listed">
+                                                Listed
+                                            </span>
+
+                                        <% } else { %>
+
+                                            <span class="status unlisted">
+                                                Unlisted
+                                            </span>
+
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <%= new Date(product.createdAt).toLocaleDateString("en-IN") %>
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <% if (!product.isDeleted) { %>
+
+                                                <button
+                                                    type="button"
+                                                    class="btn secondary-btn edit-btn"
+                                                    data-id="<%= product._id %>"
+                                                    data-name="<%= product.name %>"
+                                                    data-description="<%= product.description %>"
+                                                    data-category="<%= product.category ? product.category._id : '' %>"
+                                                    data-price="<%= product.price %>"
+                                                    data-discount="<%= product.discount || 0 %>"
+                                                    data-highlights="<%= Array.isArray(product.highlights) ? product.highlights.join('\n') : '' %>"
+                                                >
+                                                    Edit
+                                                </button>
+
+                                                <form
+                                                    action="/admin/products/<%= product._id %>/toggle-listing"
+                                                    method="POST"
+                                                >
+                                                    <button
+                                                        type="submit"
+                                                        class="btn warning-btn"
+                                                    >
+                                                        <%= product.isListed ? "Unlist" : "List" %>
+                                                    </button>
+                                                </form>
+
+                                                <form
+                                                    action="/admin/products/<%= product._id %>/archive"
+                                                    method="POST"
+                                                    class="archive-form"
+                                                >
+                                                    <button
+                                                        type="submit"
+                                                        class="btn danger-btn"
+                                                    >
+                                                        Archive
+                                                    </button>
+                                                </form>
+
+                                            <% } else { %>
+
+                                                <span class="form-note">
+                                                    Archived product
+                                                </span>
+
+                                            <% } %>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+        const productForm = document.getElementById("productForm");
+        const formTitle = document.getElementById("formTitle");
+        const submitButton = document.getElementById("submitButton");
+        const cancelEditButton = document.getElementById("cancelEditButton");
+
+        const nameInput = document.getElementById("name");
+        const descriptionInput = document.getElementById("description");
+        const categoryInput = document.getElementById("category");
+        const priceInput = document.getElementById("price");
+        const discountInput = document.getElementById("discount");
+        const highlightsInput = document.getElementById("highlights");
+
+        function resetProductForm() {
+            productForm.action = "/admin/products";
+            productForm.reset();
+
+            formTitle.textContent = "Add New Product";
+            submitButton.textContent = "Save Product";
+            cancelEditButton.hidden = true;
+        }
+
+        document.querySelectorAll(".edit-btn").forEach(button => {
+
+            button.addEventListener("click", function () {
+
+                const id = this.dataset.id;
+
+                productForm.action = `/admin/products/${id}/edit`;
+
+                nameInput.value = this.dataset.name;
+                descriptionInput.value = this.dataset.description;
+                categoryInput.value = this.dataset.category;
+                priceInput.value = this.dataset.price;
+                discountInput.value = this.dataset.discount;
+                highlightsInput.value = this.dataset.highlights;
+
+                formTitle.textContent = "Edit Product";
+                submitButton.textContent = "Update Product";
+                cancelEditButton.hidden = false;
+
+                document.getElementById("productFormCard").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            });
+
+        });
+
+        cancelEditButton.addEventListener("click", resetProductForm);
+
+        document.querySelectorAll(".archive-form").forEach(form => {
+
+            form.addEventListener("submit", function (event) {
+
+                const confirmed = confirm(
+                    "Are you sure you want to archive this product? It will no longer be available for normal listing."
+                );
+
+                if (!confirmed) {
+                    event.preventDefault();
+                }
+
+            });
+
+        });
+
+        const successMessage = document.getElementById("successMessage");
+
+        if (successMessage) {
+            setTimeout(() => {
+                successMessage.style.display = "none";
+            }, 4000);
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Management - KidLoop Admin</title>
+
+    <link rel="stylesheet" href="/css/admin/sidebar.css">
+
+    <style>
+        /* Keep your existing User Management CSS here */
+        :root {
+            --ink: #292531;
+            --muted: #827b8d;
+            --purple: #62516F;
+            --purple-dark: #30243F;
+            --purple-soft: #EDE5F7;
+            --surface: #ffffff;
+            --page: #FAF8F6;
+            --border: #eae4ed;
+            --green: #21865b;
+            --red: #c74343;
+            --shadow: 0 10px 30px rgba(40, 29, 77, .06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--page);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+        button, input { font: inherit; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+        .app-shell { min-height: 100vh; }
+        .main-area { min-height: 100vh; margin-left: 220px; }
+        .topbar {
+            min-height: 76px; padding: 16px 34px; background: var(--surface);
+            border-bottom: 1px solid var(--border); display: flex;
+            justify-content: space-between; align-items: center; gap: 20px;
+            position: sticky; top: 0; z-index: 10;
+        }
+        .topbar-eyebrow { color: var(--muted); font-size: 11px; margin-bottom: 5px; }
+        .topbar h1 { font-size: 20px; letter-spacing: -.4px; }
+        .topbar-right { display: flex; align-items: center; gap: 12px; }
+        .topbar-status {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 8px 11px; border: 1px solid var(--border);
+            border-radius: 9px; color: #56516b; font-size: 11px; font-weight: 700;
+        }
+        .status-dot { width: 7px; height: 7px; background: #38b77b; border-radius: 50%; }
+        .mobile-menu {
+            display: none; border: 1px solid var(--border); background: white;
+            color: var(--ink); border-radius: 9px; width: 39px; height: 39px; cursor: pointer;
+        }
+        .content { max-width: 1500px; padding: 30px 34px 45px; margin: 0 auto; }
+        .welcome-row {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            gap: 16px; margin-bottom: 24px;
+        }
+        .eyebrow {
+            color: var(--purple); font-size: 10px; font-weight: 800;
+            letter-spacing: 1.7px; text-transform: uppercase; margin-bottom: 8px;
+        }
+        .page-title { font-size: 27px; letter-spacing: -.8px; }
+        .page-subtitle { margin-top: 7px; color: var(--muted); font-size: 13px; }
+        .date-chip {
+            white-space: nowrap; padding: 10px 13px; border-radius: 10px;
+            border: 1px solid var(--border); background: white; color: #625d76; font-size: 11px;
+        }
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px; margin-bottom: 24px;
+        }
+        .stat-card {
+            position: relative; overflow: hidden; background: white;
+            border: 1px solid var(--border); border-radius: 15px; padding: 20px;
+            box-shadow: var(--shadow);
+        }
+        .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .stat-label { color: var(--muted); font-size: 12px; font-weight: 600; }
+        .stat-icon {
+            width: 38px; height: 38px; border-radius: 12px;
+            display: grid; place-items: center; background: var(--purple-soft); font-size: 18px;
+        }
+        .stat-value { margin-top: 16px; font-size: 26px; font-weight: 800; letter-spacing: -.7px; }
+        .stat-note { margin-top: 6px; color: var(--muted); font-size: 11px; }
+        .panel {
+            background: white; border: 1px solid var(--border);
+            border-radius: 15px; box-shadow: var(--shadow); overflow: hidden;
+        }
+        .panel-heading {
+            padding: 22px 22px 17px; display: flex; justify-content: space-between;
+            align-items: flex-start; gap: 15px; border-bottom: 1px solid var(--border);
+        }
+        .panel-heading h3 { font-size: 16px; }
+        .panel-heading p { margin-top: 5px; color: var(--muted); font-size: 11px; }
+        .panel-tag {
+            padding: 6px 9px; border-radius: 7px; background: #f5f2ff;
+            color: var(--purple); font-size: 10px; font-weight: 800;
+        }
+        .search-area { padding: 18px 22px; border-bottom: 1px solid var(--border); }
+        .search-row { display: flex; gap: 10px; }
+        .search-row input {
+            min-width: 0; flex: 1; padding: 12px 14px; border: 1px solid #e2dfec;
+            border-radius: 9px; outline: none; background: #fcfbff; font-size: 12px;
+        }
+        .search-row input:focus { border-color: #a795e7; box-shadow: 0 0 0 3px #f1edff; }
+        .btn {
+            border: 0; padding: 11px 17px; border-radius: 9px; cursor: pointer;
+            font-size: 12px; font-weight: 700; transition: transform .15s, opacity .15s;
+        }
+        .btn:hover { opacity: .9; transform: translateY(-1px); }
+        .search-btn { background: var(--purple); color: white; }
+        .clear-btn { background: #f0eef5; color: #514b66; }
+        .message {
+            display: none; margin: 16px 22px 0; padding: 12px 14px;
+            border-radius: 9px; font-size: 12px;
+        }
+        .message.success { display: block; background: #e8f7ef; color: #176b45; }
+        .message.error { display: block; background: #fff0f0; color: #a62e2e; }
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th, td { padding: 15px 18px; text-align: left; border-bottom: 1px solid #f0eef5; }
+        th {
+            background: #fbfaff; color: #77728b; font-size: 10px;
+            text-transform: uppercase; letter-spacing: .7px; font-weight: 800;
+        }
+        td { color: #4b465f; font-size: 12px; }
+        tbody tr:hover { background: #fdfcff; }
+        .status {
+            display: inline-block; padding: 6px 9px; border-radius: 20px;
+            font-size: 10px; font-weight: 800;
+        }
+        .active { background: #e6f7ee; color: #21865b; }
+        .blocked { background: #ffebeb; color: #c74343; }
+        .action-btn {
+            border: 0; padding: 8px 12px; border-radius: 7px;
+            cursor: pointer; font-size: 11px; font-weight: 800;
+        }
+        .block-btn { background: #fff2db; color: #a96805; }
+        .unblock-btn { background: #e6f7ee; color: #21865b; }
+        .action-btn:hover { filter: brightness(.97); }
+        .loading, .empty { text-align: center; padding: 36px; color: var(--muted); }
+        .pagination {
+            display: flex; justify-content: center; align-items: center;
+            flex-wrap: wrap; gap: 7px; padding: 18px 15px 6px;
+        }
+        .pagination button {
+            min-width: 34px; padding: 8px 11px; border: 1px solid #e4e0ed;
+            background: white; border-radius: 7px; cursor: pointer; color: #625d76; font-size: 11px;
+        }
+        .pagination button:hover { background: #f3efff; }
+        .pagination button.active-page { background: var(--purple); color: white; border-color: var(--purple); }
+        .pagination button:disabled { opacity: .4; cursor: not-allowed; }
+        .page-info { padding: 8px 15px 20px; text-align: center; color: var(--muted); font-size: 11px; }
+        .sidebar-overlay { display: none; }
+
+        @media (max-width: 1050px) {
+            .admin-sidebar { width: 200px; }
+            .main-area { margin-left: 200px; }
+            .content { padding: 25px 22px 35px; }
+            .topbar { padding: 15px 22px; }
+            .stats-grid { gap: 11px; }
+            .stat-card { padding: 16px; }
+        }
+        @media (max-width: 760px) {
+            .admin-sidebar { transform: translateX(-100%); width: 245px; transition: transform .25s ease; }
+            .admin-sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.show {
+                display: block; position: fixed; inset: 0; z-index: 999;
+                background: rgba(20, 15, 35, .45);
+            }
+            .main-area { margin-left: 0; }
+            .mobile-menu { display: inline-grid; place-items: center; flex: 0 0 auto; }
+            .topbar { justify-content: flex-start; gap: 12px; padding: 13px 16px; }
+            .topbar-copy { flex: 1; }
+            .topbar h1 { font-size: 17px; }
+            .topbar-eyebrow { font-size: 10px; }
+            .topbar-status { display: none; }
+            .content { padding: 22px 14px 30px; }
+            .welcome-row { align-items: flex-start; flex-direction: column; }
+            .page-title { font-size: 23px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .stat-card { padding: 17px; }
+            .stat-value { margin-top: 10px; }
+            .panel-heading { padding: 18px 16px 14px; }
+            .search-area { padding: 15px 16px; }
+            .search-row { flex-wrap: wrap; }
+            .search-row input { flex-basis: 100%; }
+            .search-row .btn { flex: 1; }
+            .message { margin-left: 16px; margin-right: 16px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-shell">
+    <%- include("../partials/admin/sidebar", { activePage: "customers" }) %>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="main-area">
+        <header class="topbar">
+            <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+            <div class="topbar-copy">
+                <div class="topbar-eyebrow">KidLoop / Administration</div>
+                <h1>User Management</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="topbar-status"><span class="status-dot"></span> Admin session active</div>
+            </div>
+        </header>
+
+        <main class="content">
+            <section class="welcome-row">
+                <div>
+                    <div class="eyebrow">Customer administration</div>
+                    <h2 class="page-title">User Management</h2>
+                    <p class="page-subtitle">Manage customer accounts, search records, and control account access.</p>
+                </div>
+                <div class="date-chip" id="todayDate">KidLoop Admin Panel</div>
+            </section>
+
+            <section class="stats-grid" aria-label="User management overview">
+                <article class="stat-card">
+                    <div class="stat-top"><span class="stat-label">User records</span><span class="stat-icon">♙</span></div>
+                    <div class="stat-value" id="totalUsersStat">—</div>
+                    <div class="stat-note">Total matching your current search</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Current page</span><span class="stat-icon">▤</span></div>
+                    <div class="stat-value" id="currentPageStat">1</div>
+                    <div class="stat-note" id="pagesStat">Page 1 of 1</div>
+                </article>
+                <article class="stat-card">
+                    <div class="stat-top"><span class="stat-label">Account controls</span><span class="stat-icon">✓</span></div>
+                    <div class="stat-value">Active</div>
+                    <div class="stat-note">Block and unblock actions require confirmation</div>
+                </article>
+            </section>
+
+            <section class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Customer accounts</h3>
+                        <p>Search by name, email, or phone number.</p>
+                    </div>
+                    <span class="panel-tag">USER DIRECTORY</span>
+                </div>
+
+                <div class="search-area">
+                    <div class="search-row">
+                        <input type="text" id="searchInput" placeholder="Search by name, email or phone..." aria-label="Search users">
+                        <button class="btn search-btn" type="button" onclick="searchUsers()">Search users</button>
+                        <button class="btn clear-btn" type="button" onclick="clearSearch()">Clear</button>
+                    </div>
+                </div>
+
+                <div id="message" class="message" role="status" aria-live="polite"></div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th><th>Name</th><th>Email</th><th>Phone</th>
+                                <th>Status</th><th>Joined</th><th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr><td colspan="7" class="loading">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="pagination" class="pagination"></div>
+                <div id="pageInfo" class="page-info"></div>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+    let currentSearch = "";
+    let totalPages = 1;
+    let messageTimer;
+
+    const sidebar = document.getElementById("adminSidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
+    const mobileMenu = document.getElementById("mobileMenu");
+
+    document.getElementById("todayDate").textContent =
+        new Date().toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", year: "numeric" });
+
+    function closeSidebar() {
+        sidebar.classList.remove("open");
+        sidebarOverlay.classList.remove("show");
+        mobileMenu.setAttribute("aria-expanded", "false");
+    }
+
+    mobileMenu.addEventListener("click", () => {
+        const isOpen = sidebar.classList.toggle("open");
+        sidebarOverlay.classList.toggle("show", isOpen);
+        mobileMenu.setAttribute("aria-expanded", String(isOpen));
+    });
+    sidebarOverlay.addEventListener("click", closeSidebar);
+
+    document.querySelectorAll(".planned-link").forEach(link => {
+        link.addEventListener("click", event => {
+            event.preventDefault();
+            showMessage(`${link.dataset.module} is not implemented yet. We will connect this menu when that module is ready.`, "error");
+            closeSidebar();
+        });
+    });
+
+    async function loadUsers(page = 1) {
+        currentPage = page;
+        const tableBody = document.getElementById("userTableBody");
+        tableBody.innerHTML = `<tr><td colspan="7" class="loading">Loading users...</td></tr>`;
+
+        try {
+            const params = new URLSearchParams({
+                page: currentPage,
+                limit: 5,
+                search: currentSearch
+            });
+
+            const response = await fetch(`/admin/users?${params.toString()}`);
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Unable to load users");
+            }
+
+            displayUsers(data.users);
+            displayPagination(data.currentPage, data.totalPages);
+            displayPageInfo(data.currentPage, data.totalPages, data.totalUsers);
+
+            document.getElementById("totalUsersStat").textContent =
+                Number(data.totalUsers || 0).toLocaleString();
+            document.getElementById("currentPageStat").textContent = data.currentPage || 1;
+            document.getElementById("pagesStat").textContent =
+                `Page ${data.currentPage || 1} of ${data.totalPages || 1}`;
+        } catch (error) {
+            console.error(error);
+            tableBody.innerHTML = `<tr><td colspan="7" class="empty">${escapeHtml(error.message)}</td></tr>`;
+            document.getElementById("pagination").innerHTML = "";
+            document.getElementById("pageInfo").textContent = "";
+            document.getElementById("totalUsersStat").textContent = "—";
+            showMessage(error.message, "error");
+        }
+    }
+
+    function displayUsers(users) {
+        const tableBody = document.getElementById("userTableBody");
+
+        if (!users || users.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="7" class="empty">No users found. Try a different search.</td></tr>`;
+            return;
+        }
+
+        tableBody.innerHTML = users.map((user, index) => {
+            const number = ((currentPage - 1) * 5) + index + 1;
+            const statusClass = user.isBlocked ? "blocked" : "active";
+            const statusText = user.isBlocked ? "Blocked" : "Active";
+            const actionClass = user.isBlocked ? "unblock-btn" : "block-btn";
+            const actionText = user.isBlocked ? "Unblock" : "Block";
+            const joinedDate = user.createdAt
+                ? new Date(user.createdAt).toLocaleDateString()
+                : "-";
+
+            return `
+                <tr>
+                    <td>${number}</td>
+                    <td>${escapeHtml(user.name || "-")}</td>
+                    <td>${escapeHtml(user.email || "-")}</td>
+                    <td>${escapeHtml(user.phone || "-")}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>${escapeHtml(joinedDate)}</td>
+                    <td>
+                        <button class="action-btn ${actionClass}" type="button"
+                            onclick="toggleUserBlock('${escapeHtml(user._id)}', ${Boolean(user.isBlocked)})">
+                            ${actionText}
+                        </button>
+                    </td>
+                </tr>`;
+        }).join("");
+    }
+
+    function searchUsers() {
+        currentSearch = document.getElementById("searchInput").value.trim();
+        currentPage = 1;
+        loadUsers(1);
+    }
+
+    function clearSearch() {
+        document.getElementById("searchInput").value = "";
+        currentSearch = "";
+        currentPage = 1;
+        loadUsers(1);
+    }
+
+    document.getElementById("searchInput").addEventListener("keydown", event => {
+        if (event.key === "Enter") searchUsers();
+    });
+
+    async function toggleUserBlock(userId, currentlyBlocked) {
+        const action = currentlyBlocked ? "unblock" : "block";
+        const confirmation = currentlyBlocked
+            ? "Are you sure you want to unblock this user?"
+            : "Are you sure you want to block this user?";
+
+        if (!confirm(confirmation)) return;
+
+        try {
+            const response = await fetch(`/admin/users/${encodeURIComponent(userId)}/block`, {
+                method: "PATCH"
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || `Unable to ${action} user`);
+            }
+
+            showMessage(data.message || `User ${action}ed successfully`, "success");
+            await loadUsers(currentPage);
+        } catch (error) {
+            console.error(error);
+            showMessage(error.message, "error");
+        }
+    }
+
+    function displayPagination(page, pages) {
+        const pagination = document.getElementById("pagination");
+        totalPages = pages || 1;
+
+        if (totalPages <= 1) {
+            pagination.innerHTML = "";
+            return;
+        }
+
+        let html = `
+            <button type="button" onclick="loadUsers(${page - 1})" ${page === 1 ? "disabled" : ""}>Previous</button>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<button type="button" class="${i === page ? "active-page" : ""}"
+                ${i === page ? 'aria-current="page"' : ""}
+                onclick="loadUsers(${i})">${i}</button>`;
+        }
+
+        html += `<button type="button" onclick="loadUsers(${page + 1})"
+            ${page === totalPages ? "disabled" : ""}>Next</button>`;
+        pagination.innerHTML = html;
+    }
+
+    function displayPageInfo(page, pages, totalUsers) {
+        const pageInfo = document.getElementById("pageInfo");
+        if (!totalUsers) {
+            pageInfo.textContent = "No users found";
+            return;
+        }
+        pageInfo.textContent = `Page ${page} of ${pages} · ${Number(totalUsers).toLocaleString()} total users`;
+    }
+
+    function showMessage(message, type) {
+        const messageBox = document.getElementById("message");
+        clearTimeout(messageTimer);
+        messageBox.textContent = message;
+        messageBox.className = `message ${type}`;
+
+        // Success messages disappear after 4 seconds; errors remain until the next message.
+        if (type === "success") {
+            messageTimer = setTimeout(() => {
+                messageBox.className = "message";
+                messageBox.textContent = "";
+            }, 4000);
+        }
+    }
+
+    async function logoutAdmin() {
+        if (!confirm("Are you sure you want to logout?")) return;
+
+        try {
+            const response = await fetch("/admin/logout", { method: "POST" });
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                window.location.replace("/admin/login");
+            } else {
+                showMessage(data.message || "Logout failed", "error");
+            }
+        } catch (error) {
+            console.error(error);
+            showMessage("Unable to logout. Please try again.", "error");
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+    // Load user data when the page opens.
+    loadUsers();
+</script>
+</body>
+</html>

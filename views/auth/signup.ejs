@@ -299,8 +299,9 @@
 
 
                 <form
-                    id="signupForm"
-                    novalidate
+                id="signupForm"
+                autocomplete="off"
+                novalidate
                 >
 
                     <!-- NAME -->
@@ -990,7 +991,42 @@
 
             }
         );
+             
 
+                // Clear signup details when returning through browser history.
+        window.addEventListener("pageshow", function (event) {
+            const navigationEntries =
+                performance.getEntriesByType("navigation");
+
+            const navigatedBack =
+                navigationEntries.length > 0 &&
+                navigationEntries[0].type === "back_forward";
+
+            if (event.persisted || navigatedBack) {
+                signupForm.reset();
+
+                // Clear validation errors and messages too.
+                nameError.textContent = "";
+                emailError.textContent = "";
+                phoneError.textContent = "";
+                passwordError.textContent = "";
+                confirmPasswordError.textContent = "";
+
+                message.textContent = "";
+                message.className = "message";
+
+                // Restore password visibility controls.
+                passwordInput.type = "password";
+                confirmPasswordInput.type = "password";
+
+                togglePassword.textContent = "Show";
+                toggleConfirmPassword.textContent = "Show";
+
+                // Restore the submit button.
+                signupBtn.disabled = false;
+                signupBtn.textContent = "CREATE ACCOUNT";
+            }
+        });
     </script>
 
 </body>

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Category Management - KidLoop Admin</title>
+
+    <link rel="stylesheet" href="/css/admin/sidebar.css">
+
+    <style>
+        :root {
+            --ink: #292531;
+            --muted: #827b8d;
+            --purple: #62516F;
+            --purple-dark: #30243F;
+            --purple-soft: #EDE5F7;
+            --surface: #ffffff;
+            --page: #FAF8F6;
+            --border: #eae4ed;
+            --green: #21865b;
+            --red: #c74343;
+            --shadow: 0 10px 30px rgba(40, 29, 77, .06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background: var(--page);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        .main-area {
+            min-height: 100vh;
+            margin-left: 220px;
+        }
+
+        .topbar {
+            min-height: 76px;
+            padding: 16px 34px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .topbar-eyebrow {
+            color: var(--muted);
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .topbar h1 {
+            font-size: 20px;
+        }
+
+        .content {
+            max-width: 1500px;
+            padding: 30px 34px 45px;
+            margin: 0 auto;
+        }
+
+        .welcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .eyebrow {
+            color: var(--purple);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            font-size: 27px;
+        }
+
+        .page-subtitle {
+            margin-top: 7px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .panel-heading {
+            padding: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-heading h3 {
+            font-size: 16px;
+        }
+
+        .panel-heading p {
+            margin-top: 5px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .form-content {
+            padding: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #514b66;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2dfec;
+            border-radius: 9px;
+            outline: none;
+            background: #fcfbff;
+            font-size: 12px;
+        }
+
+        .form-group input:focus {
+            border-color: #a795e7;
+        }
+
+        .form-group small {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            border: 0;
+            padding: 11px 17px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .primary-btn {
+            background: var(--purple);
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #f0eef5;
+            color: #514b66;
+        }
+
+        .message {
+            margin: 16px 22px 0;
+            padding: 12px 14px;
+            border-radius: 9px;
+            font-size: 12px;
+        }
+
+        .success {
+            background: #e8f7ef;
+            color: #176b45;
+        }
+
+        .error {
+            background: #fff0f0;
+            color: #a62e2e;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th, td {
+            padding: 15px 18px;
+            text-align: left;
+            border-bottom: 1px solid #f0eef5;
+        }
+
+        th {
+            background: #fbfaff;
+            color: #77728b;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        td {
+            color: #4b465f;
+            font-size: 12px;
+        }
+
+        .category-image {
+            width: 58px;
+            height: 58px;
+            object-fit: cover;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .active {
+            background: #e6f7ee;
+            color: #21865b;
+        }
+
+        .inactive {
+            background: #ffebeb;
+            color: #c74343;
+        }
+
+        .action-form {
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .action-btn {
+            border: 0;
+            padding: 8px 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .edit-btn {
+            background: var(--purple-soft);
+            color: var(--purple-dark);
+        }
+
+        .toggle-btn {
+            background: #fff2db;
+            color: #a96805;
+        }
+
+        .archive-btn {
+            background: #ffebeb;
+            color: #c74343;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 36px;
+            color: var(--muted);
+        }
+
+        @media (max-width: 760px) {
+            .main-area {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 22px 14px 30px;
+            }
+
+            .topbar {
+                padding: 15px 16px;
+            }
+
+            .welcome-row {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-heading,
+            .form-content {
+                padding: 16px;
+            }
+        }
+        [hidden] {
+    display: none !important;
+}
+    </style>
+</head>
+
+<body>
+<div class="app-shell">
+
+    <%- include("../partials/admin/sidebar", { activePage: "categories" }) %>
+
+    <div class="main-area">
+
+        <header class="topbar">
+            <div>
+                <div class="topbar-eyebrow">KidLoop / Administration</div>
+                <h1>Category Management</h1>
+            </div>
+            <div style="font-size:12px;color:#21865b;font-weight:700;">
+                ● Admin session active
+            </div>
+        </header>
+
+        <main class="content">
+
+            <section class="welcome-row">
+                <div>
+                    <div class="eyebrow">Product organization</div>
+                    <h2 class="page-title">Manage Categories</h2>
+                    <p class="page-subtitle">
+                        Create, edit, activate, deactivate and archive product categories.
+                    </p>
+                </div>
+            </section>
+
+            <% if (success) { %>
+                <div class="message success" role="status">
+                    <%= success %>
+                </div>
+            <% } %>
+
+            <% if (error) { %>
+                <div class="message error" role="alert">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <section class="panel" id="categoryFormPanel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h3 id="formTitle">Add New Category</h3>
+                        <p>Enter a category name and upload its image.</p>
+                    </div>
+                </div>
+
+                <div class="form-content">
+
+                    <form
+                        id="categoryForm"
+                        action="/admin/categories"
+                        method="POST"
+                        enctype="multipart/form-data"
+                    >
+
+                        <div class="form-grid">
+
+                            <div class="form-group">
+                                <label for="name">Category Name *</label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    maxlength="50"
+                                    placeholder="Example: Dresses"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="image">Category Image *</label>
+
+                                <input
+                                    type="file"
+                                    id="image"
+                                    name="image"
+                                    accept=".jpg,.jpeg,.png,.webp"
+                                >
+
+                                <small>
+                                    JPG, PNG or WEBP. Maximum size: 2 MB.
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <div class="form-actions">
+                            <button
+                                type="submit"
+                                class="btn primary-btn"
+                                id="submitButton"
+                            >
+                                Create Category
+                            </button>
+
+                            <button
+                                type="button"
+                                class="btn secondary-btn"
+                                id="cancelEditButton"
+                                hidden
+                                onclick="resetCategoryForm()"
+                            >
+                                Cancel Edit
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </section>
+
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h3>Category Directory</h3>
+                        <p>
+                            Archived categories are excluded from this list.
+                        </p>
+                    </div>
+
+                    <span style="
+                        padding:6px 9px;
+                        border-radius:7px;
+                        background:#f5f2ff;
+                        color:#62516F;
+                        font-size:10px;
+                        font-weight:800;
+                    ">
+                        CATEGORIES
+                    </span>
+                </div>
+
+                <!-- CATEGORY SEARCH AND SORTING -->
+                <div style="
+                    padding: 20px 22px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    gap: 15px;
+                    flex-wrap: wrap;
+                    border-bottom: 1px solid var(--border);
+                ">
+                    <form
+                        action="/admin/categories"
+                        method="GET"
+                        style="display:flex;gap:10px;flex-wrap:wrap;flex:1;"
+                    >
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search category name..."
+                            value="<%= search || '' %>"
+                            aria-label="Search category name"
+                            style="padding:10px 12px;border:1px solid var(--border);border-radius:8px;min-width:200px;flex:1;"
+                        >
+
+                        <select
+                            name="sort"
+                            aria-label="Sort categories"
+                            style="padding:10px;border:1px solid var(--border);border-radius:8px;background:white;"
+                        >
+                            <option value="newest" <%= sort === "newest" ? "selected" : "" %>>Newest First</option>
+                            <option value="oldest" <%= sort === "oldest" ? "selected" : "" %>>Oldest First</option>
+                            <option value="name-asc" <%= sort === "name-asc" ? "selected" : "" %>>Name: A–Z</option>
+                            <option value="name-desc" <%= sort === "name-desc" ? "selected" : "" %>>Name: Z–A</option>
+                        </select>
+
+                        <button type="submit" class="btn primary-btn">Search</button>
+                        <a href="/admin/categories" class="btn secondary-btn">Clear</a>
+                    </form>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Category Name</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% if (categories && categories.length > 0) { %>
+
+                                <% categories.forEach((category, index) => { %>
+                                    <tr>
+                                        <td><%= ((currentPage - 1) * 10) + index + 1 %></td>
+
+                                        <td>
+                                            <img
+                                                src="<%= category.image %>"
+                                                alt="<%= category.name %>"
+                                                class="category-image"
+                                            >
+                                        </td>
+
+                                        <td>
+                                            <strong><%= category.name %></strong>
+                                        </td>
+
+                                        <td>
+                                            <% if (category.isActive) { %>
+                                                <span class="status active">
+                                                    Active
+                                                </span>
+                                            <% } else { %>
+                                                <span class="status inactive">
+                                                    Inactive
+                                                </span>
+                                            <% } %>
+                                        </td>
+
+                                        <td>
+                                            <%= category.createdAt
+                                                ? new Date(category.createdAt).toLocaleDateString()
+                                                : "-" %>
+                                        </td>
+
+                                        <td>
+                                            <button
+    type="button"
+    class="action-btn edit-btn"
+    data-id="<%= category._id %>"
+    data-name="<%= category.name %>"
+>
+    Edit
+</button>
+
+                                            <form
+                                                class="action-form"
+                                                action="/admin/categories/<%= category._id %>/toggle-status"
+                                                method="POST"
+                                                onsubmit="return confirm('Change this category status?')"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="action-btn toggle-btn"
+                                                >
+                                                    <%= category.isActive
+                                                        ? "Deactivate"
+                                                        : "Activate" %>
+                                                </button>
+                                            </form>
+
+                                            <form
+                                                class="action-form"
+                                                action="/admin/categories/<%= category._id %>/archive"
+                                                method="POST"
+                                                onsubmit="return confirm('Archive this category? It will not be permanently deleted.')"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="action-btn archive-btn"
+                                                >
+                                                    Archive
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+
+                            <% } else { %>
+
+                                <tr>
+                                    <td colspan="6" class="empty">
+                                        No categories found. Add your first category above.
+                                    </td>
+                                </tr>
+
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- BACKEND PAGINATION -->
+            <% if (totalPages > 1) { %>
+                <nav
+                    aria-label="Category pagination"
+                    style="display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin:24px 0;"
+                >
+                    <% if (currentPage > 1) { %>
+                        <a
+                            class="btn secondary-btn"
+                            href="/admin/categories?<%= new URLSearchParams({ search: search || '', sort: sort || 'newest', page: currentPage - 1 }).toString() %>"
+                        >Previous</a>
+                    <% } %>
+
+                    <% for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) { %>
+                        <a
+                            class="btn <%= pageNumber === currentPage ? 'primary-btn' : 'secondary-btn' %>"
+                            href="/admin/categories?<%= new URLSearchParams({ search: search || '', sort: sort || 'newest', page: pageNumber }).toString() %>"
+                            aria-current="<%= pageNumber === currentPage ? 'page' : 'false' %>"
+                        ><%= pageNumber %></a>
+                    <% } %>
+
+                    <% if (currentPage < totalPages) { %>
+                        <a
+                            class="btn secondary-btn"
+                            href="/admin/categories?<%= new URLSearchParams({ search: search || '', sort: sort || 'newest', page: currentPage + 1 }).toString() %>"
+                        >Next</a>
+                    <% } %>
+                </nav>
+            <% } %>
+
+        </main>
+    </div>
+</div>
+
+<script>
+    const categoryForm = document.getElementById("categoryForm");
+    const categoryNameInput = document.getElementById("name");
+    const categoryImageInput = document.getElementById("image");
+    const formTitle = document.getElementById("formTitle");
+    const submitButton = document.getElementById("submitButton");
+    const cancelEditButton = document.getElementById("cancelEditButton");
+
+    let editingCategoryId = null;
+
+    document.querySelectorAll(".edit-btn").forEach(button => {
+    button.addEventListener("click", function () {
+        const id = this.dataset.id;
+        const name = this.dataset.name;
+
+        editCategory(id, name);
+    });
+});
+
+    function editCategory(id, name) {
+        editingCategoryId = id;
+
+        categoryNameInput.value = name;
+
+        // Browsers do not allow a script to prefill a file input.
+        categoryImageInput.required = false;
+        categoryImageInput.value = "";
+
+        categoryForm.action =
+            `/admin/categories/${encodeURIComponent(id)}/edit`;
+
+        formTitle.textContent = "Edit Category";
+        submitButton.textContent = "Save Changes";
+        cancelEditButton.hidden = false;
+
+        document.getElementById("categoryFormPanel").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+
+    function resetCategoryForm() {
+        editingCategoryId = null;
+
+        categoryForm.reset();
+        categoryForm.action = "/admin/categories";
+
+        categoryImageInput.required = true;
+
+        formTitle.textContent = "Add New Category";
+        submitButton.textContent = "Create Category";
+        cancelEditButton.hidden = true;
+    }
+
+    categoryForm.addEventListener("submit", function (event) {
+        if (!categoryNameInput.value.trim()) {
+            event.preventDefault();
+            alert("Please enter a category name.");
+            categoryNameInput.focus();
+            return;
+        }
+
+        if (!editingCategoryId && !categoryImageInput.files.length) {
+            event.preventDefault();
+            alert("Please select a category image.");
+            categoryImageInput.focus();
+            return;
+        }
+
+        if (
+            categoryImageInput.files.length > 0 &&
+            categoryImageInput.files[0].size > 2 * 1024 * 1024
+        ) {
+            event.preventDefault();
+            alert("The image must be 2 MB or smaller.");
+        }
+    });
+</script>
+
+</body>
+</html>

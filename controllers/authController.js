@@ -262,36 +262,23 @@ const login = async (req, res) => {
 /* =========================================
    LOGOUT
 ========================================= */
-
 const logout = async (req, res) => {
-    try {
-
-        req.session.destroy((error) => {
-
-            if (error) {
-                return res.status(500).json({
-                    success: false,
-                    message: "Logout failed"
-                });
-            }
-
-            res.status(200).json({
-                success: true,
-                message: "Logout successful"
+    req.session.destroy((error) => {
+        if (error) {
+            return res.status(500).json({
+                success: false,
+                message: "Logout failed"
             });
+        }
 
+        res.clearCookie("connect.sid");
+
+        return res.status(200).json({
+            success: true,
+            message: "Logout successful"
         });
-
-    } catch (error) {
-
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-
-    }
+    });
 };
-
 
 /* =========================================
    EXPORT

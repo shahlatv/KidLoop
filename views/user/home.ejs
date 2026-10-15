@@ -146,32 +146,38 @@
         }
 
 
-        .hero-button {
-            display: inline-block;
+        /* KIDLOOP SHOP NOW BUTTON */
+.hero-button {
+    display: inline-block;
+    padding: 15px 32px;
+    background: #E98579;
+    color: #30243F;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    border: 1px solid #E98579;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
 
-            padding: 15px 32px;
+.hero-button:hover {
+    background: #30243F;
+    color: #FFFFFF;
+    border-color: #30243F;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(48, 36, 63, 0.15);
+}
 
-            background: #222;
-
-            color: white;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-            letter-spacing: 1.5px;
-
-            transition: 0.3s;
-        }
-
-
-        .hero-button:hover {
-            background: #555;
-
-            transform: translateY(-2px);
-        }
-
-
+.hero-button:focus-visible {
+    outline: 3px solid #30243F;
+    outline-offset: 4px;
+}
         /* RIGHT IMAGE */
 
         .hero-right {

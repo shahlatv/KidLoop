@@ -7,6 +7,13 @@ const userController =
 
 const addressController =
     require("../controllers/addressController");
+const shopController = require("../controllers/shopController");
+const productDetailsController =
+    require("../controllers/productDetailsController");
+const cartController =
+    require("../controllers/cartController");
+const wishlistController =
+    require("../controllers/wishlistController");
 
 const userService =
     require("../services/userService");
@@ -14,6 +21,7 @@ const userService =
 const userAuth =
     require("../middleware/userAuth");
 
+const profileUpload = require("../middleware/profileUpload");
 
 /* =========================================
    PROFILE
@@ -66,6 +74,25 @@ router.put(
     userController.updateProfile
 );
 
+router.post(
+    "/profile/image",
+    userAuth,
+    (req, res, next) => {
+        profileUpload.single("profileImage")(req, res, (error) => {
+            if (error) {
+                return res.status(400).json({
+                    success: false,
+                    message: error.code === "LIMIT_FILE_SIZE"
+                        ? "Image size must not exceed 2 MB."
+                        : error.message
+                });
+            }
+
+            next();
+        });
+    },
+    userController.uploadProfileImage
+);
 
 /* =========================================
    CHANGE PASSWORD
@@ -170,5 +197,80 @@ router.delete(
     addressController.deleteAddress
 );
 
+/* =========================================
+   CUSTOMER SHOP
+========================================= */
+
+router.get(
+    "/shop",
+    shopController.renderShop
+);
+
+/* =========================================
+   PRODUCT DETAILS
+========================================= */
+
+router.get(
+    "/products/:id",
+    productDetailsController.renderProductDetails
+);
+
+/* =========================================
+   CART MANAGEMENT
+========================================= */
+
+// Display cart
+router.get(
+    "/cart",
+    userAuth,
+    cartController.getCart
+);
+
+// Add product to cart
+router.post(
+    "/cart/add",
+    userAuth,
+    cartController.addToCart
+);
+
+// Update cart item quantity
+router.post(
+    "/cart/update/:itemId",
+    userAuth,
+    cartController.updateCartQuantity
+);
+
+// Remove item from cart
+router.post(
+    "/cart/remove/:itemId",
+    userAuth,
+    cartController.removeFromCart
+);
+
+
+/* =========================================
+   WISHLIST MANAGEMENT
+========================================= */
+
+// Display wishlist
+router.get(
+    "/wishlist",
+    userAuth,
+    wishlistController.getWishlist
+);
+
+// Add product to wishlist
+router.post(
+    "/wishlist/add",
+    userAuth,
+    wishlistController.addToWishlist
+);
+
+// Remove product from wishlist
+router.post(
+    "/wishlist/remove",
+    userAuth,
+    wishlistController.removeFromWishlist
+);
 
 module.exports = router;

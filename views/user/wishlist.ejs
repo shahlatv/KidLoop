@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Wishlist | KidLoop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #30243F;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 30px;
+        }
+
+        .page-heading h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #756482;
+            line-height: 1.6;
+        }
+
+        .alert {
+            padding: 13px 16px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #e8f6ed;
+            color: #216b38;
+        }
+
+        .alert-error {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .wishlist-card {
+            border: 1px solid #eee7f2;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .wishlist-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(48, 36, 63, 0.08);
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            height: 240px;
+            background: #f5f1ec;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #756482;
+            padding: 15px;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .in-stock {
+            background: #e4f5e9;
+            color: #216b38;
+        }
+
+        .out-of-stock {
+            background: #fff0ef;
+            color: #b42318;
+        }
+
+        .product-info {
+            padding: 17px;
+        }
+
+        .category {
+            color: #756482;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .product-name {
+            font-size: 17px;
+            margin: 9px 0;
+            line-height: 1.4;
+        }
+
+        .product-name a:hover {
+            color: #E98579;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 14px 0;
+        }
+
+        .original-price {
+            color: #888;
+            font-size: 13px;
+            text-decoration: line-through;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+
+        .discount {
+            display: inline-block;
+            color: #b94e43;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .added-date {
+            color: #756482;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 7px;
+            border: 1px solid #E98579;
+            background: #E98579;
+            color: #30243F;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #30243F;
+            border-color: #30243F;
+            color: #fff;
+        }
+
+        .secondary-button {
+            background: #fff;
+            border-color: #d9d0e1;
+            color: #30243F;
+        }
+
+        .secondary-button:hover {
+            background: #f5f1ec;
+            border-color: #d9d0e1;
+            color: #30243F;
+        }
+
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .remove-button {
+            background: #fff;
+            color: #b42318;
+            border-color: #f0c7c3;
+        }
+
+        .remove-button:hover {
+            background: #fff0ef;
+            color: #b42318;
+            border-color: #f0c7c3;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 65px 20px;
+            border: 1px solid #eee7f2;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #756482;
+            margin-bottom: 25px;
+        }
+
+        .shop-button {
+            display: inline-block;
+            width: auto;
+            padding: 13px 25px;
+        }
+
+        @media (max-width: 900px) {
+            .wishlist-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 550px) {
+            .wishlist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image-wrapper {
+                height: 280px;
+            }
+
+            .page-heading h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/topbar") %>
+    <%- include("../partials/navbar") %>
+
+    <main class="container">
+
+        <section class="page-heading">
+            <h1>My Wishlist ❤️</h1>
+            <p>Your favourite styles, saved for later.</p>
+        </section>
+
+        <!-- Success and error messages -->
+
+        <% if (success === "added") { %>
+            <div class="alert alert-success">
+                Product added to your wishlist successfully!
+            </div>
+        <% } else if (success === "removed") { %>
+            <div class="alert alert-success">
+                Product removed from your wishlist.
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="alert alert-error">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Wishlist products -->
+
+        <% if (wishlist.products && wishlist.products.length > 0) { %>
+
+            <div class="wishlist-grid">
+
+                <% wishlist.products.forEach(item => { %>
+
+                    <%
+                        const product = item.product;
+
+                        const discountPercentage =
+                            Number(product.discount) || 0;
+
+                        const originalPrice =
+                            Number(product.price) || 0;
+
+                        const finalPrice =
+                            originalPrice *
+                            (1 - discountPercentage / 100);
+
+                        const productImage = item.displayImage;
+
+                        const productAvailable = item.inStock === true;
+
+                        const availableVariant = item.variants.find(
+                            variant => Number(variant.stock) > 0
+                        );
+                    %>
+
+                    <article class="wishlist-card">
+
+                        <!-- Product image -->
+
+                        <div class="product-image-wrapper">
+
+                            <% if (productImage) { %>
+
+                                <a href="/user/products/<%= product._id %>">
+                                    <img
+                                        src="<%= productImage %>"
+                                        alt="<%= product.name %>"
+                                        class="product-image"
+                                        loading="lazy"
+                                    >
+                                </a>
+
+                            <% } else { %>
+
+                                <div class="image-placeholder">
+                                    Product image unavailable
+                                </div>
+
+                            <% } %>
+
+                            <% if (productAvailable) { %>
+
+                                <span class="stock-badge in-stock">
+                                    In Stock
+                                </span>
+
+                            <% } else { %>
+
+                                <span class="stock-badge out-of-stock">
+                                    Out of Stock
+                                </span>
+
+                            <% } %>
+
+                        </div>
+
+                        <div class="product-info">
+
+                            <div class="category">
+                                <%= product.category
+                                    ? product.category.name
+                                    : "Kids Collection" %>
+                            </div>
+
+                            <h2 class="product-name">
+                                <a href="/user/products/<%= product._id %>">
+                                    <%= product.name %>
+                                </a>
+                            </h2>
+
+                            <!-- Product price -->
+
+                            <div class="price">
+
+                                ₹<%= finalPrice.toFixed(2) %>
+
+                                <% if (discountPercentage > 0) { %>
+
+                                    <span class="original-price">
+                                        ₹<%= originalPrice.toFixed(2) %>
+                                    </span>
+
+                                    <span class="discount">
+                                        <%= discountPercentage %>% OFF
+                                    </span>
+
+                                <% } %>
+
+                            </div>
+
+                            <!-- Date added -->
+
+                            <div class="added-date">
+                                Added on
+                                <%= new Date(item.addedAt).toLocaleDateString("en-IN") %>
+                            </div>
+
+                            <!-- Actions -->
+
+                            <div class="card-actions">
+
+                                <a
+                                    href="/user/products/<%= product._id %>"
+                                    class="button"
+                                >
+                                    View Details
+                                </a>
+
+                                <% if (productAvailable && availableVariant) { %>
+
+                                    <form
+    action="/user/cart/add"
+    method="POST"
+>
+    <input
+        type="hidden"
+        name="productId"
+        value="<%= product._id %>"
+    >
+
+    <input
+        type="hidden"
+        name="variantId"
+        value="<%= availableVariant._id %>"
+    >
+
+    <input
+        type="hidden"
+        name="quantity"
+        value="1"
+    >
+
+    <!-- Identifies this request as coming from the wishlist -->
+    <input
+        type="hidden"
+        name="source"
+        value="wishlist"
+    >
+
+    <button
+        type="submit"
+        class="button"
+    >
+        Add to Cart
+    </button>
+</form>
+
+                                <% } else { %>
+
+                                    <button
+                                        type="button"
+                                        class="button"
+                                        disabled
+                                    >
+                                        Currently Unavailable
+                                    </button>
+
+                                <% } %>
+
+                                <form
+                                    action="/user/wishlist/remove"
+                                    method="POST"
+                                    onsubmit="return confirm('Remove this product from your wishlist?');"
+                                >
+
+                                    <input
+                                        type="hidden"
+                                        name="productId"
+                                        value="<%= product._id %>"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="button remove-button"
+                                    >
+                                        Remove from Wishlist
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            </div>
+
+        <% } else { %>
+
+            <!-- Empty wishlist -->
+
+            <section class="empty-state">
+
+                <div class="empty-icon">💜</div>
+
+                <h2>Your Wishlist Is Empty</h2>
+
+                <p>
+                    You haven't saved any favourites yet.
+                    Explore our collection and save the styles you love!
+                </p>
+
+                <a
+                    href="/user/shop"
+                    class="button shop-button"
+                >
+                    Explore Kids' Collection
+                </a>
+
+            </section>
+
+        <% } %>
+
+    </main>
+
+    <%- include("../partials/footer") %>
+
+</body>
+</html>

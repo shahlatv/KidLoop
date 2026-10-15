@@ -212,7 +212,6 @@
     <%- include("../partials/topbar") %>
     <%- include("../partials/navbar") %>
 
-
     <main class="edit-page">
 
         <div class="page-title">
@@ -220,22 +219,13 @@
             <p>Update your personal information</p>
         </div>
 
-
         <div class="edit-card">
 
-            <div
-                id="generalError"
-                class="general-error">
-            </div>
+            <div id="generalError" class="general-error"></div>
 
+            <div id="successMessage" class="success-message"></div>
 
-            <div
-                id="successMessage"
-                class="success-message">
-            </div>
-
-
-            <!-- PROFILE IMAGE -->
+            <!-- PROFILE IMAGE PREVIEW -->
 
             <div class="profile-image-section">
 
@@ -246,6 +236,13 @@
                         class="profile-image"
                         src="<%= user.profileImage %>"
                         alt="Profile Image">
+
+                    <div
+                        id="defaultProfile"
+                        class="default-profile"
+                        style="display:none;">
+                        👤
+                    </div>
 
                 <% } else { %>
 
@@ -268,19 +265,15 @@
 
             </div>
 
-
-            <!-- FORM -->
+            <!-- EDIT PROFILE FORM -->
 
             <form id="editProfileForm">
-
 
                 <!-- NAME -->
 
                 <div class="form-group">
 
-                    <label for="name">
-                        Full Name
-                    </label>
+                    <label for="name">Full Name</label>
 
                     <input
                         type="text"
@@ -289,21 +282,15 @@
                         value="<%= user.name %>"
                         autocomplete="name">
 
-                    <div
-                        id="nameError"
-                        class="error-message">
-                    </div>
+                    <div id="nameError" class="error-message"></div>
 
                 </div>
-
 
                 <!-- EMAIL -->
 
                 <div class="form-group">
 
-                    <label for="email">
-                        Email Address
-                    </label>
+                    <label for="email">Email Address</label>
 
                     <input
                         type="email"
@@ -318,14 +305,11 @@
 
                 </div>
 
-
                 <!-- PHONE -->
 
                 <div class="form-group">
 
-                    <label for="phone">
-                        Phone Number
-                    </label>
+                    <label for="phone">Phone Number</label>
 
                     <input
                         type="tel"
@@ -335,40 +319,30 @@
                         maxlength="10"
                         autocomplete="tel">
 
-                    <div
-                        id="phoneError"
-                        class="error-message">
-                    </div>
+                    <div id="phoneError" class="error-message"></div>
 
                 </div>
 
-
-                <!-- PROFILE IMAGE URL -->
+                <!-- PROFILE IMAGE UPLOAD -->
 
                 <div class="form-group">
 
-                    <label for="profileImage">
-                        Profile Image URL
-                    </label>
+                    <label for="profileImage">Profile Picture</label>
 
                     <input
-                        type="text"
+                        type="file"
                         id="profileImage"
                         name="profileImage"
-                        value="<%= user.profileImage || '' %>"
-                        placeholder="Enter image URL">
+                        accept="image/jpeg, image/png, image/webp">
 
                     <div class="field-note">
-                        Enter a valid image URL to update your profile picture.
+                        Choose a JPG, PNG, or WEBP image.
+                        Maximum size: 2 MB.
                     </div>
 
-                    <div
-                        id="imageError"
-                        class="error-message">
-                    </div>
+                    <div id="imageError" class="error-message"></div>
 
                 </div>
-
 
                 <!-- BUTTONS -->
 
@@ -396,44 +370,24 @@
 
     </main>
 
-
     <%- include("../partials/footer") %>
 
-
     <script>
+        const form = document.getElementById("editProfileForm");
 
-        const form =
-            document.getElementById("editProfileForm");
+        const nameInput = document.getElementById("name");
+        const phoneInput = document.getElementById("phone");
+        const imageInput = document.getElementById("profileImage");
 
-        const nameInput =
-            document.getElementById("name");
+        const saveBtn = document.getElementById("saveBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
 
-        const phoneInput =
-            document.getElementById("phone");
+        const nameError = document.getElementById("nameError");
+        const phoneError = document.getElementById("phoneError");
+        const imageError = document.getElementById("imageError");
 
-        const imageInput =
-            document.getElementById("profileImage");
-
-        const saveBtn =
-            document.getElementById("saveBtn");
-
-        const cancelBtn =
-            document.getElementById("cancelBtn");
-
-        const nameError =
-            document.getElementById("nameError");
-
-        const phoneError =
-            document.getElementById("phoneError");
-
-        const imageError =
-            document.getElementById("imageError");
-
-        const generalError =
-            document.getElementById("generalError");
-
-        const successMessage =
-            document.getElementById("successMessage");
+        const generalError = document.getElementById("generalError");
+        const successMessage = document.getElementById("successMessage");
 
         const profileImagePreview =
             document.getElementById("profileImagePreview");
@@ -441,285 +395,274 @@
         const defaultProfile =
             document.getElementById("defaultProfile");
 
+        let selectedImageUrl = null;
 
-        /* --------------------------------
-           SHOW ERROR
-        -------------------------------- */
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        /* SHOW ERROR */
 
         function showError(element, message) {
-
             element.textContent = message;
             element.style.display = "block";
-
         }
 
-
-        /* --------------------------------
-           CLEAR ERRORS
-        -------------------------------- */
+        /* CLEAR ERRORS */
 
         function clearErrors() {
-
-            nameError.style.display = "none";
-            phoneError.style.display = "none";
-            imageError.style.display = "none";
-            generalError.style.display = "none";
-
-            nameError.textContent = "";
-            phoneError.textContent = "";
-            imageError.textContent = "";
-            generalError.textContent = "";
-
+            [
+                nameError,
+                phoneError,
+                imageError,
+                generalError
+            ].forEach(element => {
+                element.textContent = "";
+                element.style.display = "none";
+            });
         }
 
+        /* IMAGE PREVIEW AND VALIDATION */
 
-        /* --------------------------------
-           IMAGE PREVIEW
-        -------------------------------- */
+        imageInput.addEventListener("change", function () {
+            imageError.textContent = "";
+            imageError.style.display = "none";
 
-        imageInput.addEventListener("input", function () {
+            const file = imageInput.files[0];
 
-            const imageUrl =
-                imageInput.value.trim();
-
-            if (!imageUrl) {
-
-                profileImagePreview.style.display = "none";
-
-                if (defaultProfile) {
-                    defaultProfile.style.display = "flex";
-                }
-
+            if (!file) {
                 return;
             }
 
-            profileImagePreview.src = imageUrl;
+            if (!allowedTypes.includes(file.type)) {
+                showError(
+                    imageError,
+                    "Please select a JPG, PNG, or WEBP image."
+                );
 
-            profileImagePreview.style.display = "block";
+                imageInput.value = "";
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                showError(
+                    imageError,
+                    "Image size must not exceed 2 MB."
+                );
+
+                imageInput.value = "";
+                return;
+            }
+
+            if (selectedImageUrl) {
+                URL.revokeObjectURL(selectedImageUrl);
+            }
+
+            selectedImageUrl = URL.createObjectURL(file);
+
+            profileImagePreview.src = selectedImageUrl;
+            profileImagePreview.style.display = "inline-block";
 
             if (defaultProfile) {
                 defaultProfile.style.display = "none";
             }
-
         });
 
+        /* IMAGE LOADING ERROR */
 
-        /* --------------------------------
-           IMAGE ERROR
-        -------------------------------- */
+        profileImagePreview.addEventListener("error", function () {
+            if (selectedImageUrl) {
+                return;
+            }
 
-        profileImagePreview.addEventListener(
-            "error",
-            function () {
+            profileImagePreview.style.display = "none";
 
-                profileImagePreview.style.display = "none";
+            if (defaultProfile) {
+                defaultProfile.style.display = "flex";
+            }
+        });
 
-                if (defaultProfile) {
-                    defaultProfile.style.display = "flex";
-                }
+        /* CANCEL */
 
+        cancelBtn.addEventListener("click", function () {
+            window.location.href = "/user/profile";
+        });
+
+        /* FORM SUBMISSION */
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            clearErrors();
+
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const selectedFile = imageInput.files[0];
+
+            let isValid = true;
+
+            /* NAME VALIDATION */
+
+            if (!name) {
+                showError(nameError, "Name is required.");
+                isValid = false;
+
+            } else if (name.length < 2) {
                 showError(
-                    imageError,
-                    "Unable to load this image URL."
+                    nameError,
+                    "Name must contain at least 2 characters."
+                );
+                isValid = false;
+
+            } else if (name.length > 50) {
+                showError(
+                    nameError,
+                    "Name cannot exceed 50 characters."
+                );
+                isValid = false;
+
+            } else if (
+                !/^[A-Za-z]+(?:[ '.-][A-Za-z]+)*$/.test(name)
+            ) {
+                showError(nameError, "Please enter a valid name.");
+                isValid = false;
+            }
+
+            /* PHONE VALIDATION */
+
+            if (
+                phone &&
+                !/^[6-9]\d{9}$/.test(phone)
+            ) {
+                showError(
+                    phoneError,
+                    "Enter a valid 10-digit Indian phone number."
                 );
 
+                isValid = false;
             }
-        );
 
+            /* IMAGE VALIDATION */
 
-        /* --------------------------------
-           CANCEL
-        -------------------------------- */
+            if (selectedFile) {
+                if (!allowedTypes.includes(selectedFile.type)) {
+                    showError(
+                        imageError,
+                        "Please select a JPG, PNG, or WEBP image."
+                    );
 
-        cancelBtn.addEventListener(
-            "click",
-            function () {
+                    isValid = false;
 
-                window.location.href =
-                    "/user/profile";
+                } else if (selectedFile.size > 2 * 1024 * 1024) {
+                    showError(
+                        imageError,
+                        "Image size must not exceed 2 MB."
+                    );
 
+                    isValid = false;
+                }
             }
-        );
 
+            if (!isValid) {
+                return;
+            }
 
-        /* --------------------------------
-           FORM SUBMIT
-        -------------------------------- */
+            saveBtn.textContent = "Saving...";
+            saveBtn.classList.add("loading");
+            saveBtn.disabled = true;
 
-        form.addEventListener(
-            "submit",
-            async function (event) {
+            try {
+                /*
+                 * STEP 1:
+                 * Update name and phone.
+                 */
 
-                event.preventDefault();
+                const profileResponse = await fetch("/user/profile", {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name,
+                        phone
+                    })
+                });
 
-                clearErrors();
+                const profileData = await profileResponse.json();
 
-                const name =
-                    nameInput.value.trim();
-
-                const phone =
-                    phoneInput.value.trim();
-
-                const profileImage =
-                    imageInput.value.trim();
-
-
-                let isValid = true;
-
-
-                /* NAME VALIDATION */
-
-                if (!name) {
-
-                    showError(
-                        nameError,
-                        "Name is required."
+                if (!profileResponse.ok || !profileData.success) {
+                    throw new Error(
+                        profileData.message ||
+                        "Unable to update profile details."
                     );
-
-                    isValid = false;
-
-                } else if (name.length < 2) {
-
-                    showError(
-                        nameError,
-                        "Name must contain at least 2 characters."
-                    );
-
-                    isValid = false;
-
-                } else if (name.length > 50) {
-
-                    showError(
-                        nameError,
-                        "Name cannot exceed 50 characters."
-                    );
-
-                    isValid = false;
-
-                } else if (
-                    !/^[A-Za-z]+(?:[ '.-][A-Za-z]+)*$/.test(name)
-                ) {
-
-                    showError(
-                        nameError,
-                        "Please enter a valid name."
-                    );
-
-                    isValid = false;
-
                 }
 
+                /*
+                 * STEP 2:
+                 * Upload the image only when a new file is selected.
+                 */
 
-                /* PHONE VALIDATION */
+                if (selectedFile) {
+                    const formData = new FormData();
 
-                if (phone) {
+                    formData.append("profileImage", selectedFile);
 
-                    if (!/^[6-9]\d{9}$/.test(phone)) {
+                    const imageResponse = await fetch(
+                        "/user/profile/image",
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
 
-                        showError(
-                            phoneError,
-                            "Enter a valid 10-digit Indian phone number."
-                        );
+                    const imageData = await imageResponse.json();
 
-                        isValid = false;
-
-                    }
-
-                }
-
-
-                if (!isValid) {
-                    return;
-                }
-
-
-                /* LOADING */
-
-                saveBtn.textContent =
-                    "Saving...";
-
-                saveBtn.classList.add("loading");
-
-
-                try {
-
-                    const response =
-                        await fetch("/user/profile", {
-
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-
-                            body: JSON.stringify({
-                                name,
-                                phone,
-                                profileImage
-                            })
-
-                        });
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (!response.ok || !data.success) {
-
+                    if (!imageResponse.ok || !imageData.success) {
                         throw new Error(
-                            data.message ||
-                            "Unable to update profile."
+                            imageData.message ||
+                            "Unable to upload profile picture."
                         );
-
                     }
-
-
-                    /*
-                       Store success message before
-                       redirecting to profile page.
-                    */
-
-                    sessionStorage.setItem(
-                        "profileUpdateSuccess",
-                        "Profile updated successfully."
-                    );
-
-
-                    /*
-                       Redirect to profile page.
-                    */
-
-                    window.location.href =
-                        "/user/profile";
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Profile update error:",
-                        error
-                    );
-
-                    generalError.textContent =
-                        error.message ||
-                        "Something went wrong. Please try again.";
-
-                    generalError.style.display =
-                        "block";
-
-                    saveBtn.textContent =
-                        "Save Changes";
-
-                    saveBtn.classList.remove(
-                        "loading"
-                    );
-
                 }
 
-            }
-        );
+                /*
+                 * STEP 3:
+                 * Show success message after redirect.
+                 */
 
+                sessionStorage.setItem(
+                    "profileUpdateSuccess",
+                    selectedFile
+                        ? "Profile and picture updated successfully."
+                        : "Profile updated successfully."
+                );
+
+                window.location.href = "/user/profile";
+
+            } catch (error) {
+                console.error("Profile update error:", error);
+
+                showError(
+                    generalError,
+                    error.message ||
+                    "Something went wrong. Please try again."
+                );
+
+                saveBtn.textContent = "Save Changes";
+                saveBtn.classList.remove("loading");
+                saveBtn.disabled = false;
+            }
+        });
+
+        /* CLEAN UP TEMPORARY PREVIEW URL */
+
+        window.addEventListener("beforeunload", function () {
+            if (selectedImageUrl) {
+                URL.revokeObjectURL(selectedImageUrl);
+            }
+        });
     </script>
 
 </body>

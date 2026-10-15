@@ -43,6 +43,41 @@ const updateProfile = async (req, res) => {
     }
 };
 
+
+const uploadProfileImage = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Please select an image to upload."
+            });
+        }
+
+        const profileImage = `/uploads/profiles/${req.file.filename}`;
+
+        const user = await userService.updateProfile(
+            req.session.userId,
+            undefined,
+            undefined,
+            profileImage
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Profile picture uploaded successfully.",
+            profileImage: user.profileImage
+        });
+
+    } catch (error) {
+        console.error("Profile image upload error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to upload profile picture."
+        });
+    }
+};
+
 const changePassword = async (req, res) => {
     try {
         const {
@@ -125,6 +160,7 @@ const verifyEmailOTP = async (req, res) => {
 module.exports = {
     getProfile,
     updateProfile,
+    uploadProfileImage,
     changePassword,
     changeEmail,
     verifyEmailOTP

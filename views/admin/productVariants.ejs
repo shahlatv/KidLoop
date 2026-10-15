@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Variants | KidLoop</title>
+
+    <link rel="stylesheet" href="/css/admin/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F8F6FA;
+            color: #30243F;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+        }
+
+        h1 { margin-top: 0; }
+
+        .subtitle {
+            color: #756482;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(48, 36, 63, 0.07);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width { grid-column: 1 / -1; }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            padding: 11px;
+            border: 1px solid #D8D0E0;
+            border-radius: 7px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #E2D9E8;
+            border-color: #756482;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #756482;
+            margin-top: 6px;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 14px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .primary-btn {
+            background: #62516F;
+            color: white;
+        }
+
+        .primary-btn:hover { background: #756482; }
+
+        .secondary-btn {
+            background: #EDE5F7;
+            color: #30243F;
+        }
+
+        .warning-btn {
+            background: #FFF0D6;
+            color: #805B12;
+        }
+
+        .danger-btn {
+            background: #FCE7E5;
+            color: #A83232;
+        }
+
+        .success-message {
+            background: #E5F6E9;
+            color: #246B37;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            background: #FCE7E5;
+            color: #A83232;
+            padding: 13px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            min-width: 900px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 13px;
+            border-bottom: 1px solid #EEE8F2;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #F5F0F8;
+            color: #62516F;
+            white-space: nowrap;
+        }
+
+        .variant-images {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .variant-images img {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .status {
+            padding: 5px 9px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .active-status {
+            background: #E5F6E9;
+            color: #246B37;
+        }
+
+        .inactive-status {
+            background: #FFF0D6;
+            color: #805B12;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .actions form { margin: 0; }
+
+        .empty-state {
+            text-align: center;
+            padding: 25px;
+            color: #756482;
+        }
+
+        [hidden] { display: none !important; }
+
+        @media (max-width: 900px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: auto; }
+            .card { padding: 16px; }
+        }
+
+
+        /* Image preview and admin crop editor */
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .image-preview-card {
+            width: 130px;
+            padding: 8px;
+            border: 1px solid #D8D0E0;
+            border-radius: 8px;
+            background: #FFFFFF;
+        }
+        .image-preview-card img {
+            display: block;
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .image-preview-card button {
+            width: 100%;
+            margin-top: 8px;
+        }
+        .crop-editor {
+            margin-top: 20px;
+            padding: 16px;
+            border: 1px solid #D8D0E0;
+            border-radius: 10px;
+            background: #FFFFFF;
+        }
+        .crop-image-wrapper {
+            width: 100%;
+            max-width: 500px;
+            height: 350px;
+            margin: 15px auto;
+        }
+        .crop-image-wrapper img {
+            display: block;
+            max-width: 100%;
+        }
+        .crop-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/admin/sidebar", { activePage: "productVariants" }) %>
+
+    <main class="main-content">
+
+        <h1>Product Variant Management</h1>
+        <p class="subtitle">Manage product colors, sizes, images and stock.</p>
+
+        <% if (success) { %>
+            <div class="success-message" id="successMessage">
+                <%= success %>
+            </div>
+        <% } %>
+
+        <% if (error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- CREATE / EDIT VARIANT -->
+
+        <section class="card" id="variantFormCard">
+
+            <h2 id="variantFormTitle">Add Product Variant</h2>
+
+            <form
+                action="/admin/product-variants"
+                method="POST"
+                enctype="multipart/form-data"
+                id="variantForm"
+            >
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+                        <label for="product">Product *</label>
+
+                        <select id="product" name="product" required>
+                            <option value="">Select a product</option>
+
+                            <% products.forEach(product => { %>
+                                <option value="<%= product._id %>">
+                                    <%= product.name %>
+                                </option>
+                            <% }) %>
+                        </select>
+
+                        <span class="note">
+                            Select the main product for this variant.
+                        </span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color">Color *</label>
+
+                        <input
+                            type="text"
+                            id="color"
+                            name="color"
+                            maxlength="50"
+                            placeholder="Example: Blue"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="size">Size *</label>
+
+                        <select id="size" name="size" required>
+                            <option value="">Select size</option>
+                            <option value="0-1 Years">0–1 Years</option>
+                            <option value="1-2 Years">1–2 Years</option>
+                            <option value="2-3 Years">2–3 Years</option>
+                            <option value="3-4 Years">3–4 Years</option>
+                            <option value="4-5 Years">4–5 Years</option>
+                            <option value="5-6 Years">5–6 Years</option>
+                            <option value="6-7 Years">6–7 Years</option>
+                            <option value="7-8 Years">7–8 Years</option>
+                            <option value="8-9 Years">8–9 Years</option>
+                            <option value="9-10 Years">9–10 Years</option>
+                            <option value="10-11 Years">10–11 Years</option>
+                            <option value="11-12 Years">11–12 Years</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="stock">Stock Quantity *</label>
+
+                        <input
+                            type="number"
+                            id="stock"
+                            name="stock"
+                            min="0"
+                            step="1"
+                            value="0"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="images">Variant Images</label>
+
+                        <input
+                            type="file"
+                            id="images"
+                            name="images"
+                            accept="image/jpeg,image/png,image/webp"
+                            multiple
+                        >
+
+                        <span class="note" id="imageHelp">
+                            Upload at least 3 images for a new variant.
+                            Maximum 10 images, 5 MB per image.
+                        </span>
+
+                        <span class="note" id="imageCount">
+                            No images selected.
+                        </span>
+
+                        <div id="imagePreviewContainer" class="image-preview-container"></div>
+
+                        <div id="cropEditor" class="crop-editor" hidden>
+                            <h3>Crop Product Image</h3>
+                            <p class="note">Drag the image to reposition it. Use the mouse wheel or crop controls to zoom.</p>
+                            <div class="crop-image-wrapper">
+                                <img id="cropImage" src="" alt="Image to crop">
+                            </div>
+                            <div class="crop-buttons">
+                                <button type="button" id="rotateLeft" class="btn secondary-btn">Rotate Left</button>
+                                <button type="button" id="rotateRight" class="btn secondary-btn">Rotate Right</button>
+                                <button type="button" id="cancelCrop" class="btn secondary-btn">Cancel</button>
+                                <button type="button" id="applyCrop" class="btn primary-btn">Apply Crop</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="actions">
+                    <button
+                        type="submit"
+                        class="btn primary-btn"
+                        id="submitButton"
+                    >
+                        Save Variant
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn secondary-btn"
+                        id="cancelEditButton"
+                        hidden
+                    >
+                        Cancel Edit
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- VARIANT LIST -->
+
+        <section class="card">
+
+            <h2>All Product Variants</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Stock</th>
+                            <th>Images</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <% if (variants.length === 0) { %>
+
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    No variants created yet.
+                                </td>
+                            </tr>
+
+                        <% } else { %>
+
+                            <% variants.forEach(variant => { %>
+
+                                <tr>
+
+                                    <td>
+                                        <%= variant.product
+                                            ? variant.product.name
+                                            : "Product unavailable" %>
+                                    </td>
+
+                                    <td><%= variant.color %></td>
+
+                                    <td><%= variant.size %></td>
+
+                                    <td>
+                                        <form
+                                            action="/admin/product-variants/<%= variant._id %>/update-stock"
+                                            method="POST"
+                                            class="actions"
+                                        >
+                                            <input
+                                                type="number"
+                                                name="stock"
+                                                value="<%= variant.stock %>"
+                                                min="0"
+                                                step="1"
+                                                required
+                                                style="width:85px"
+                                            >
+
+                                            <button
+                                                type="submit"
+                                                class="btn primary-btn"
+                                            >
+                                                Update
+                                            </button>
+                                        </form>
+                                    </td>
+
+                                    <td>
+                                        <div class="variant-images">
+                                            <% variant.images.forEach(image => { %>
+                                                <img
+                                                    src="<%= image %>"
+                                                    alt="<%= variant.color %> variant"
+                                                >
+                                            <% }) %>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <% if (variant.isActive) { %>
+                                            <span class="status active-status">
+                                                Active
+                                            </span>
+                                        <% } else { %>
+                                            <span class="status inactive-status">
+                                                Inactive
+                                            </span>
+                                        <% } %>
+                                    </td>
+
+                                    <td>
+                                        <div class="actions">
+
+                                            <button
+                                                type="button"
+                                                class="btn secondary-btn edit-variant-btn"
+                                                data-id="<%= variant._id %>"
+                                                data-product="<%= variant.product ? variant.product._id : '' %>"
+                                                data-color="<%= variant.color %>"
+                                                data-size="<%= variant.size %>"
+                                                data-stock="<%= variant.stock %>"
+                                                data-image-count="<%= Array.isArray(variant.images) ? variant.images.length : 0 %>"
+                                            >
+                                                Edit
+                                            </button>
+
+                                            <form
+                                                action="/admin/product-variants/<%= variant._id %>/toggle-status"
+                                                method="POST"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="btn warning-btn"
+                                                >
+                                                    <%= variant.isActive
+                                                        ? "Deactivate"
+                                                        : "Activate" %>
+                                                </button>
+                                            </form>
+
+                                            <form
+                                                action="/admin/product-variants/<%= variant._id %>/archive"
+                                                method="POST"
+                                                class="archive-form"
+                                            >
+                                                <button
+                                                    type="submit"
+                                                    class="btn danger-btn"
+                                                >
+                                                    Archive
+                                                </button>
+                                            </form>
+
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                            <% }) %>
+
+                        <% } %>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script>
+        const variantForm = document.getElementById("variantForm");
+        const productInput = document.getElementById("product");
+        const colorInput = document.getElementById("color");
+        const sizeInput = document.getElementById("size");
+        const stockInput = document.getElementById("stock");
+        const imagesInput = document.getElementById("images");
+        const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+        const cropEditor = document.getElementById("cropEditor");
+        const cropImage = document.getElementById("cropImage");
+        const formTitle = document.getElementById("variantFormTitle");
+        const submitButton = document.getElementById("submitButton");
+        const cancelEditButton = document.getElementById("cancelEditButton");
+        const imageHelp = document.getElementById("imageHelp");
+        const imageCount = document.getElementById("imageCount");
+
+        let editingVariant = false;
+        let existingImageCount = 0;
+        let selectedFiles = [];
+        let cropper = null;
+        let cropIndex = null;
+        let cropObjectUrl = null;
+
+        function revokePreviewUrls() {
+            imagePreviewContainer.querySelectorAll("img[data-object-url]").forEach(img => {
+                URL.revokeObjectURL(img.dataset.objectUrl);
+            });
+        }
+
+        function syncFilesToInput() {
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => dataTransfer.items.add(file));
+            imagesInput.files = dataTransfer.files;
+        }
+
+        function renderImagePreviews() {
+            revokePreviewUrls();
+            imagePreviewContainer.innerHTML = "";
+
+            selectedFiles.forEach((file, index) => {
+                const card = document.createElement("div");
+                card.className = "image-preview-card";
+
+                const image = document.createElement("img");
+                const objectUrl = URL.createObjectURL(file);
+                image.src = objectUrl;
+                image.alt = `Selected product image ${index + 1}`;
+                image.dataset.objectUrl = objectUrl;
+
+                const label = document.createElement("div");
+                label.className = "note";
+                label.textContent = `Image ${index + 1}`;
+
+                const cropButton = document.createElement("button");
+                cropButton.type = "button";
+                cropButton.className = "btn secondary-btn";
+                cropButton.textContent = "Crop / Adjust";
+                cropButton.addEventListener("click", () => openCropEditor(index));
+
+                card.append(image, label, cropButton);
+                imagePreviewContainer.appendChild(card);
+            });
+
+            const total = selectedFiles.length;
+            imageCount.textContent = editingVariant
+                ? `${total} new image(s) selected. ${existingImageCount} existing image(s) will be retained.`
+                : (total ? `${total} image(s) selected.` : "No images selected.");
+            imageCount.style.color = total > 0 && total + existingImageCount > 10 ? "#A83232" : "#756482";
+        }
+
+        imagesInput.addEventListener("change", function () {
+            selectedFiles = Array.from(this.files || []);
+            renderImagePreviews();
+        });
+
+        function openCropEditor(index) {
+            if (typeof Cropper === "undefined") {
+                alert("The image editor could not load. Check your internet connection and refresh the page.");
+                return;
+            }
+
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            if (cropObjectUrl) URL.revokeObjectURL(cropObjectUrl);
+
+            cropIndex = index;
+            cropObjectUrl = URL.createObjectURL(selectedFiles[index]);
+            cropImage.src = cropObjectUrl;
+            cropEditor.hidden = false;
+
+            cropImage.onload = () => {
+                if (cropper) cropper.destroy();
+                cropper = new Cropper(cropImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    dragMode: "move",
+                    autoCropArea: 0.9,
+                    responsive: true,
+                    background: false,
+                    movable: true,
+                    zoomable: true,
+                    rotatable: true,
+                    scalable: false
+                });
+            };
+            cropEditor.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        function closeCropEditor() {
+            if (cropper) {
+                cropper.destroy();
+                cropper = null;
+            }
+            cropImage.onload = null;
+            cropImage.removeAttribute("src");
+            if (cropObjectUrl) {
+                URL.revokeObjectURL(cropObjectUrl);
+                cropObjectUrl = null;
+            }
+            cropEditor.hidden = true;
+            cropIndex = null;
+        }
+
+        document.getElementById("rotateLeft").addEventListener("click", () => {
+            if (cropper) cropper.rotate(-90);
+        });
+        document.getElementById("rotateRight").addEventListener("click", () => {
+            if (cropper) cropper.rotate(90);
+        });
+        document.getElementById("cancelCrop").addEventListener("click", closeCropEditor);
+
+        document.getElementById("applyCrop").addEventListener("click", () => {
+            if (!cropper || cropIndex === null) return;
+
+            const canvas = cropper.getCroppedCanvas({
+                width: 1200,
+                height: 1200,
+                fillColor: "#ffffff",
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: "high"
+            });
+
+            if (!canvas) {
+                alert("Unable to crop this image. Please try another image.");
+                return;
+            }
+
+            canvas.toBlob(blob => {
+                if (!blob) {
+                    alert("Unable to process the cropped image. Please try again.");
+                    return;
+                }
+
+                const originalName = selectedFiles[cropIndex].name.replace(/\.[^.]+$/, "") || "product-image";
+                selectedFiles[cropIndex] = new File(
+                    [blob],
+                    `${originalName}-cropped.jpg`,
+                    { type: "image/jpeg", lastModified: Date.now() }
+                );
+
+                syncFilesToInput();
+                closeCropEditor();
+                renderImagePreviews();
+            }, "image/jpeg", 0.92);
+        });
+
+        // Enter edit mode
+        document.querySelectorAll(".edit-variant-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                editingVariant = true;
+                existingImageCount = Number(this.dataset.imageCount || 0);
+                const id = this.dataset.id;
+
+                variantForm.action = `/admin/product-variants/${id}/edit`;
+                productInput.value = this.dataset.product;
+                colorInput.value = this.dataset.color;
+                sizeInput.value = this.dataset.size;
+                stockInput.value = this.dataset.stock;
+                productInput.disabled = true;
+                productInput.required = false;
+                imagesInput.required = false;
+                imagesInput.value = "";
+                selectedFiles = [];
+                renderImagePreviews();
+
+                formTitle.textContent = "Edit Product Variant";
+                submitButton.textContent = "Update Variant";
+                cancelEditButton.hidden = false;
+                imageHelp.textContent = "Optional: crop and add images. Existing images will be retained. Maximum 10 images in total.";
+
+                document.getElementById("variantFormCard").scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+        });
+
+        function resetVariantForm() {
+            closeCropEditor();
+            editingVariant = false;
+            existingImageCount = 0;
+            selectedFiles = [];
+            variantForm.action = "/admin/product-variants";
+            variantForm.reset();
+            productInput.disabled = false;
+            productInput.required = true;
+            imagesInput.required = false;
+            syncFilesToInput();
+            renderImagePreviews();
+            formTitle.textContent = "Add Product Variant";
+            submitButton.textContent = "Save Variant";
+            cancelEditButton.hidden = true;
+            imageHelp.textContent = "Upload at least 3 images for a new variant. Maximum 10 images, 5 MB per image.";
+            imageCount.textContent = "No images selected.";
+            imageCount.style.color = "#756482";
+        }
+
+        cancelEditButton.addEventListener("click", resetVariantForm);
+
+        variantForm.addEventListener("submit", function (event) {
+            if (!editingVariant && selectedFiles.length < 3) {
+                event.preventDefault();
+                alert("Please select at least 3 images for a new variant.");
+                imagesInput.focus();
+                return;
+            }
+
+            if (selectedFiles.length > 10 || selectedFiles.length + existingImageCount > 10) {
+                event.preventDefault();
+                alert("A variant can have a maximum of 10 images in total. Please remove some new images or edit fewer images at a time.");
+                return;
+            }
+
+            syncFilesToInput();
+        });
+
+        document.querySelectorAll(".archive-form").forEach(form => {
+            form.addEventListener("submit", function (event) {
+                if (!confirm("Are you sure you want to archive this variant?")) event.preventDefault();
+            });
+        });
+
+        const successMessage = document.getElementById("successMessage");
+        if (successMessage) {
+            setTimeout(() => { successMessage.style.display = "none"; }, 4000);
+        }
+    </script>
+
+</body>
+</html>

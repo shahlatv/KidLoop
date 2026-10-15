@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart | KidLoop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #30243F;
+            background: #fff;
+        }
+
+        .cart-container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 40px 5%;
+        }
+
+        .cart-title {
+            font-size: 32px;
+            margin-bottom: 25px;
+        }
+
+        /* Success and error messages */
+        .cart-alert {
+            padding: 14px 18px;
+            margin-bottom: 22px;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .cart-alert-error {
+            color: #a12626;
+            background: #fff0f0;
+            border: 1px solid #e8aaaa;
+        }
+
+        .cart-alert-success {
+            color: #21683c;
+            background: #edfff2;
+            border: 1px solid #a8dcb7;
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 35px;
+            align-items: start;
+        }
+
+        .cart-items {
+            min-width: 0;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 150px minmax(0, 1fr);
+            gap: 25px;
+            padding: 25px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-product-image,
+        .image-placeholder {
+            width: 150px;
+            height: 180px;
+            background: #f5f1ec;
+        }
+
+        .cart-product-image {
+            object-fit: contain;
+        }
+
+        .image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #756482;
+            font-size: 13px;
+        }
+
+        .item-name {
+            font-size: 19px;
+            line-height: 1.5;
+            margin: 0 0 10px;
+        }
+
+        .item-details {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        .price-section {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 13px 0;
+        }
+
+        .original-price {
+            color: #888;
+            text-decoration: line-through;
+            font-size: 14px;
+        }
+
+        .discounted-price {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .discount-label {
+            color: #c74e43;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .stock-message {
+            margin: 12px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .in-stock {
+            color: #287348;
+        }
+
+        .low-stock {
+            color: #b56821;
+        }
+
+        .out-of-stock {
+            color: #b33333;
+            font-weight: bold;
+        }
+
+        .quantity-form {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .quantity-form label {
+            font-size: 14px;
+        }
+
+        .quantity-form input {
+            width: 75px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 15px;
+        }
+
+        .quantity-form input:disabled {
+            background: #eee;
+            cursor: not-allowed;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 18px;
+            border: 1px solid #E98579;
+            background: #E98579;
+            color: #30243F;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #30243F;
+            border-color: #30243F;
+            color: white;
+        }
+
+        .remove-button {
+            margin-top: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            color: #b33333;
+        }
+
+        .remove-button:hover {
+            background: #b33333;
+            border-color: #b33333;
+            color: white;
+        }
+
+        .cart-summary {
+            padding: 28px;
+            background: #f7f5f2;
+        }
+
+        .cart-summary h2 {
+            margin: 0 0 25px;
+            font-size: 22px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin: 18px 0;
+            font-size: 15px;
+        }
+
+        .summary-total {
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            margin-top: 25px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .summary-note {
+            color: #666;
+            font-size: 12px;
+            line-height: 1.6;
+            margin: 20px 0;
+        }
+
+        .checkout-button {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            background: #E98579;
+            color: #30243F;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .continue-shopping {
+            display: inline-block;
+            margin-top: 25px;
+            color: #756482;
+            text-decoration: underline;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 75px 20px;
+            background: #f7f5f2;
+        }
+
+        .empty-cart h2 {
+            font-size: 26px;
+        }
+
+        .empty-cart p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 850px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cart-container {
+                padding: 25px 4%;
+            }
+
+            .cart-title {
+                font-size: 27px;
+            }
+
+            .cart-item {
+                grid-template-columns: 105px minmax(0, 1fr);
+                gap: 14px;
+                padding: 20px 0;
+            }
+
+            .cart-product-image,
+            .image-placeholder {
+                width: 105px;
+                height: 135px;
+            }
+
+            .item-name {
+                font-size: 16px;
+            }
+
+            .discounted-price {
+                font-size: 17px;
+            }
+
+            .cart-summary {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/topbar") %>
+    <%- include("../partials/navbar") %>
+
+    <main class="cart-container">
+
+        <h1 class="cart-title">My Shopping Cart</h1>
+
+        <!-- Error message -->
+        <% if (error) { %>
+            <div class="cart-alert cart-alert-error" role="alert">
+                <%= error %>
+            </div>
+        <% } %>
+
+        <!-- Success message -->
+        <% if (success) { %>
+            <div class="cart-alert cart-alert-success" role="status">
+                <% if (success === "added") { %>
+                    Product added to your cart successfully.
+                <% } else if (success === "updated") { %>
+                    Cart quantity updated successfully.
+                <% } else if (success === "removed") { %>
+                    Product removed from your cart successfully.
+                <% } %>
+            </div>
+        <% } %>
+
+        <% if (cart.items && cart.items.length > 0) { %>
+
+            <%
+                let cartTotal = 0;
+                let originalTotal = 0;
+                let totalQuantity = 0;
+                let hasUnavailableItems = false;
+
+                cart.items.forEach(item => {
+                    const product = item.product;
+                    const variant = item.variant;
+
+                    const available =
+                        product &&
+                        variant &&
+                        product.isListed &&
+                        !product.isDeleted &&
+                        variant.isActive &&
+                        !variant.isDeleted;
+
+                    const stock = variant ? Number(variant.stock) : 0;
+
+                    const validStock =
+                        available &&
+                        stock > 0 &&
+                        stock >= item.quantity &&
+                        item.quantity <= 5;
+
+                    if (validStock) {
+                        const originalPrice = Number(product.price);
+                        const discount = Number(product.discount) || 0;
+
+                        const finalPrice =
+                            originalPrice * (1 - discount / 100);
+
+                        cartTotal += finalPrice * item.quantity;
+                        originalTotal += originalPrice * item.quantity;
+                        totalQuantity += item.quantity;
+                    } else {
+                        hasUnavailableItems = true;
+                    }
+                });
+
+                const totalSavings = originalTotal - cartTotal;
+            %>
+
+            <div class="cart-layout">
+
+                <section class="cart-items">
+
+                    <% cart.items.forEach(item => { %>
+
+                        <%
+                            const product = item.product;
+                            const variant = item.variant;
+
+                            const available =
+                                product &&
+                                variant &&
+                                product.isListed &&
+                                !product.isDeleted &&
+                                variant.isActive &&
+                                !variant.isDeleted;
+
+                            const stock = variant
+                                ? Number(variant.stock) || 0
+                                : 0;
+
+                            const validStock =
+                                available &&
+                                stock > 0 &&
+                                stock >= item.quantity &&
+                                item.quantity <= 5;
+
+                            const originalPrice = product
+                                ? Number(product.price)
+                                : 0;
+
+                            const discount = product
+                                ? Number(product.discount) || 0
+                                : 0;
+
+                            const finalPrice =
+                                originalPrice * (1 - discount / 100);
+
+                            const itemTotal = validStock
+                                ? finalPrice * item.quantity
+                                : 0;
+
+                            const maxQuantity = Math.min(stock, 5);
+                        %>
+
+                        <article class="cart-item">
+
+                            <% if (
+                                product &&
+                                variant &&
+                                variant.images &&
+                                variant.images.length > 0
+                            ) { %>
+
+                                <img
+                                    class="cart-product-image"
+                                    src="<%= variant.images[0] %>"
+                                    alt="<%= product.name %>"
+                                >
+
+                            <% } else { %>
+
+                                <div class="image-placeholder">
+                                    Image unavailable
+                                </div>
+
+                            <% } %>
+
+                            <div>
+
+                                <h2 class="item-name">
+                                    <%= product
+                                        ? product.name
+                                        : "Unavailable product" %>
+                                </h2>
+
+                                <div class="item-details">
+
+                                    <% if (variant) { %>
+                                        Colour: <%= variant.color %><br>
+                                        Size: <%= variant.size %><br>
+                                    <% } %>
+
+                                </div>
+
+                                <!-- Price -->
+                                <div class="price-section">
+
+                                    <% if (discount > 0) { %>
+                                        <span class="original-price">
+                                            ₹<%= originalPrice.toFixed(2) %>
+                                        </span>
+                                    <% } %>
+
+                                    <span class="discounted-price">
+                                        ₹<%= finalPrice.toFixed(2) %>
+                                    </span>
+
+                                    <% if (discount > 0) { %>
+                                        <span class="discount-label">
+                                            <%= discount %>% OFF
+                                        </span>
+                                    <% } %>
+
+                                </div>
+
+                                <!-- Stock status -->
+                                <div class="stock-message <%= !available || stock <= 0 || stock < item.quantity || item.quantity > 5 ? 'out-of-stock' : stock <= 5 ? 'low-stock' : 'in-stock' %>">
+
+                                    <% if (!product) { %>
+
+                                        This product is unavailable.
+
+                                    <% } else if (!available) { %>
+
+                                        This product or variant is unavailable.
+
+                                    <% } else if (stock <= 0) { %>
+
+                                        Out of stock.
+
+                                    <% } else if (stock < item.quantity) { %>
+
+                                        Only <%= stock %> item(s) left.
+                                        Please reduce the quantity.
+
+                                    <% } else if (item.quantity > 5) { %>
+
+                                        Maximum 5 units allowed.
+                                        Please reduce the quantity.
+
+                                    <% } else if (stock <= 5) { %>
+
+                                        Only <%= stock %> item(s) left in stock.
+
+                                    <% } else { %>
+
+                                        In stock.
+
+                                    <% } %>
+
+                                </div>
+
+                                <!-- Quantity form -->
+                                <form
+                                    action="/user/cart/update/<%= item._id %>"
+                                    method="POST"
+                                    class="quantity-form"
+                                    data-available-stock="<%= stock %>"
+                                >
+
+                                    <label for="quantity-<%= item._id %>">
+                                        Quantity:
+                                    </label>
+
+                                    <input
+                                        id="quantity-<%= item._id %>"
+                                        type="number"
+                                        name="quantity"
+                                        min="1"
+                                        max="<%= Math.max(1, Math.min(stock, 5)) %>"
+                                        value="<%= item.quantity %>"
+                                        required
+                                        <%= !available || stock <= 0 ? "disabled" : "" %>
+                                    >
+
+                                </form>
+
+                                <% if (validStock) { %>
+
+                                    <div class="item-details">
+                                        Subtotal:
+                                        <strong>
+                                            ₹<%= itemTotal.toFixed(2) %>
+                                        </strong>
+                                    </div>
+
+                                <% } %>
+
+                                <!-- Remove item -->
+                                <form
+                                    action="/user/cart/remove/<%= item._id %>"
+                                    method="POST"
+                                    style="margin-top:5px"
+                                    onsubmit="return confirm('Remove this item from your cart?')"
+                                >
+
+                                    <button
+                                        class="button remove-button"
+                                        type="submit"
+                                    >
+                                        Remove
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </article>
+
+                    <% }) %>
+
+                    <a href="/shop" class="continue-shopping">
+                        ← Continue Shopping
+                    </a>
+
+                </section>
+
+                <!-- Order summary -->
+                <aside class="cart-summary">
+
+                    <h2>Order Summary</h2>
+
+                    <div class="summary-row">
+                        <span>Total quantity</span>
+                        <span><%= totalQuantity %></span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Original total</span>
+                        <span>₹<%= originalTotal.toFixed(2) %></span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>You save</span>
+                        <span style="color:#287348">
+                            −₹<%= totalSavings.toFixed(2) %>
+                        </span>
+                    </div>
+
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span>₹<%= cartTotal.toFixed(2) %></span>
+                    </div>
+
+                    <% if (hasUnavailableItems) { %>
+
+                        <p class="summary-note" style="color:#b33333;">
+                            Some cart items are unavailable or exceed
+                            the permitted quantity. Please correct or
+                            remove those items before checkout.
+                        </p>
+
+                    <% } else { %>
+
+                        <p class="summary-note">
+                            Delivery charges and the final payable amount
+                            will be calculated during checkout.
+                        </p>
+
+                    <% } %>
+
+                    <button
+                        type="button"
+                        class="checkout-button"
+                        disabled
+                        title="Checkout functionality is not implemented yet"
+                    >
+                        Proceed to Checkout
+                    </button>
+
+                </aside>
+
+            </div>
+
+        <% } else { %>
+
+            <section class="empty-cart">
+
+                <h2>Your cart is empty</h2>
+
+                <p>
+                    Looks like you haven't added anything to your cart yet.
+                </p>
+
+                <a href="/shop" class="button">
+                    Explore Products
+                </a>
+
+            </section>
+
+        <% } %>
+
+    </main>
+
+    <%- include("../partials/footer") %>
+
+    <script>
+        // Automatically submit quantity changes using POST.
+        document.querySelectorAll(
+            ".quantity-form input[name='quantity']"
+        ).forEach(input => {
+
+            let previousValue = input.value;
+
+            input.addEventListener("change", function () {
+
+                const form = this.form;
+                const stock = Number(form.dataset.availableStock);
+                const quantity = Number(this.value);
+
+                if (
+                    !Number.isInteger(quantity) ||
+                    quantity < 1
+                ) {
+                    alert("Please enter a quantity of at least 1.");
+                    this.value = previousValue;
+                    return;
+                }
+
+                if (quantity > 5) {
+                    alert(
+                        "You can purchase a maximum of 5 units of this variant."
+                    );
+
+                    this.value = previousValue;
+                    return;
+                }
+
+                if (quantity > stock) {
+                    alert(
+                        `Only ${stock} item(s) are available in stock.`
+                    );
+
+                    this.value = previousValue;
+                    return;
+                }
+
+                if (this.value === previousValue) {
+                    return;
+                }
+
+                form.requestSubmit();
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,307 @@
+/* ========================================
+   KIDLOOP ADMIN SIDEBAR
+   ======================================== */
+
+:root {
+    --admin-sidebar-bg: #62516F;
+    --admin-sidebar-hover: #756482;
+    --admin-sidebar-active: #EDE5F7;
+    --admin-sidebar-text: #FFFFFF;
+    --admin-sidebar-muted: #E2D9E8;
+    --admin-plum: #30243F;
+    --admin-coral: #E98579;
+    --admin-lavender: #EDE5F7;
+}
+
+/* ========================================
+   SIDEBAR CONTAINER
+   ======================================== */
+
+.admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 220px;
+    padding: 20px 13px;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--admin-sidebar-bg);
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    z-index: 1000;
+
+    scrollbar-width: thin;
+    scrollbar-color: #A99AB5 transparent;
+}
+
+/* ========================================
+   KIDLOOP BRAND
+   Match homepage logo and tagline layout
+   ======================================== */
+
+.admin-brand {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    padding: 0 10px 20px;
+    margin-bottom: 18px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    text-decoration: none;
+}
+
+/* K logo mark */
+
+.admin-brand-mark {
+    width: 38px;
+    height: 38px;
+
+    display: grid;
+    place-items: center;
+
+    background: #EDE5F7;
+    color: #30243F;
+
+    border-radius: 12px;
+
+    font-size: 23px;
+    font-weight: 800;
+
+    flex-shrink: 0;
+}
+
+/* KidLoop text */
+
+.admin-brand-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Brand name */
+
+.admin-brand-name {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+
+    color: #FFFFFF;
+}
+
+/* Coral Loop text */
+
+.admin-brand-accent {
+    color: #E98579;
+}
+
+/* Tagline */
+
+.admin-brand-tagline {
+    display: block;
+
+    width: auto;
+    margin-left: 0;
+    margin-top: 1px;
+
+    font-size: 9px;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0;
+
+    color: #E2D9E8;
+
+    white-space: nowrap;
+}
+
+/* ========================================
+   NAVIGATION
+   ======================================== */
+
+.admin-navigation {
+    width: 100%;
+}
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-menu li {
+    width: 100%;
+    list-style: none;
+}
+
+/* Navigation links */
+
+.admin-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    min-height: 43px;
+
+    padding: 11px 10px;
+
+    box-sizing: border-box;
+    border-radius: 9px;
+
+    color: var(--admin-sidebar-text);
+    background: transparent;
+
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Navigation icons */
+
+.admin-menu-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 19px;
+    min-width: 19px;
+
+    font-size: 16px;
+}
+
+/* Navigation labels */
+
+.admin-menu-label {
+    flex: 1;
+    line-height: 1.4;
+}
+
+/* Arrow */
+
+.admin-menu-arrow {
+    margin-left: auto;
+    font-size: 17px;
+    line-height: 1;
+}
+
+/* Hover state */
+
+.admin-menu a:hover {
+    background: var(--admin-sidebar-hover);
+    color: #FFFFFF;
+}
+
+/* Active page */
+
+.admin-menu a.active {
+    background: var(--admin-sidebar-active);
+    color: var(--admin-plum);
+    font-weight: 700;
+}
+
+.admin-menu a.active .admin-menu-icon {
+    color: var(--admin-coral);
+}
+
+.admin-menu a.active:hover {
+    background: #F5EFFB;
+}
+
+/* ========================================
+   KEYBOARD ACCESSIBILITY
+   ======================================== */
+
+.admin-menu a:focus-visible,
+.admin-brand:focus-visible {
+    outline: 3px solid var(--admin-coral);
+    outline-offset: 3px;
+}
+
+/* ========================================
+   SIDEBAR FOOTER
+   ======================================== */
+
+.admin-sidebar-note {
+    margin-top: auto;
+    margin-bottom: 4px;
+
+    padding: 13px 11px;
+
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 10px;
+
+    color: #FFFFFF;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.admin-sidebar-note strong {
+    display: block;
+    margin-bottom: 3px;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.admin-sidebar-note p {
+    margin: 0;
+    color: var(--admin-sidebar-muted);
+}
+
+/* ========================================
+   SCROLLBAR
+   ======================================== */
+
+.admin-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background: #A99AB5;
+    border-radius: 10px;
+}
+
+/* ========================================
+   RESPONSIVE SIDEBAR
+   ======================================== */
+
+@media (max-width: 1050px) {
+    .admin-sidebar {
+        width: 200px;
+    }
+}
+
+@media (max-width: 760px) {
+    .admin-sidebar {
+        width: 245px;
+
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+    }
+
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+}

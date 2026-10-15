@@ -1,360 +1,463 @@
 <nav class="main-navbar">
 
-    <!-- LOGO -->
-    <a href="/" class="logo">
-        KidLoop
-    </a>
+    <!-- BRAND LOGO -->
+    <a href="/" class="logo" aria-label="KidLoop Home">
+        <span class="logo-mark">K</span>
 
+        <span class="logo-content">
+            <span class="logo-text">
+                Kid<span>Loop</span>
+            </span>
+            <span class="logo-tagline">Little Styles, Big Smiles.</span>
+        </span>
+    </a>
 
     <!-- NAVIGATION LINKS -->
     <div class="nav-links">
-
-        <a href="/" class="active">
-            Home
-        </a>
-
-        <a href="/shop">
-            Shop
-        </a>
-
-        <a href="/shop?sort=newest">
-            New Arrivals
-        </a>
-
-        <a href="/contact">
-            Contact
-        </a>
-
+        <a href="/" class="active">Home</a>
+        <a href="/shop">Shop</a>
+        <a href="/shop?sort=newest">New Arrivals</a>
+        <a href="/contact">Contact</a>
     </div>
-
 
     <!-- NAVIGATION ACTIONS -->
     <div class="nav-actions">
 
         <!-- SEARCH -->
-        <form
-            class="search-box"
-            action="/shop"
-            method="GET"
-        >
-
+        <form class="search-box" action="/shop" method="GET">
             <input
                 type="search"
                 name="search"
-                placeholder="Search for kids' clothing..."
+                placeholder="Search kids' clothing..."
                 aria-label="Search products"
             >
 
-            <button
-                type="submit"
-                aria-label="Search"
-            >
-                🔍
+            <button type="submit" aria-label="Search products">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                    <path d="m16 16 5 5"></path>
+                </svg>
             </button>
-
         </form>
 
-
         <!-- WISHLIST -->
-        <a
-            href="/wishlist"
-            class="nav-icon"
-            aria-label="Wishlist"
-            title="Wishlist"
-        >
-            ♡
-        </a>
-
-
+<a
+    href="/user/wishlist"
+    class="nav-icon wishlist-icon"
+    aria-label="Wishlist"
+    title="Wishlist"
+>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M20.8 8.8c0 5.2-8.8 10.2-8.8 10.2S3.2 14 3.2 8.8A4.5 4.5 0 0 1 12 6.5a4.5 4.5 0 0 1 8.8 2.3Z"></path>
+    </svg>
+</a>
         <!-- CART -->
         <a
-            href="/cart"
-            class="nav-icon"
-            aria-label="Shopping Cart"
-            title="Shopping Cart"
-        >
-            🛒
+    href="/user/cart"
+    class="nav-icon cart-icon"
+    aria-label="Shopping cart"
+    title="Shopping cart"
+>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 4h2l2.1 11.1a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+        <circle cx="10" cy="20" r="1"></circle>
+        <circle cx="18" cy="20" r="1"></circle>
+    </svg>
 
-            <span class="cart-count">
-                0
-            </span>
+<span class="cart-count"><%= typeof cartCount !== "undefined" ? cartCount : 0 %></span></a>
 
-        </a>
-
-
-        <!-- PROFILE -->
+        <!-- PROFILE PICTURE -->
         <a
             href="/user/profile"
-            class="nav-icon"
+            class="nav-profile"
             aria-label="My Account"
             title="My Account"
         >
-            👤
+            <% if (typeof currentUser !== "undefined" &&
+                   currentUser &&
+                   currentUser.profileImage) { %>
+
+                <img
+                    src="<%= currentUser.profileImage %>"
+                    alt="My Profile"
+                    class="nav-profile-image"
+                >
+
+            <% } else { %>
+
+                <span class="nav-profile-default" aria-hidden="true">
+                    ♡
+                </span>
+
+            <% } %>
         </a>
 
     </div>
-
 </nav>
 
-
 <style>
+    :root {
+        --kidloop-plum: #30243F;
+        --kidloop-coral: #E98579;
+        --kidloop-ivory: #FAF8F6;
+        --kidloop-lavender: #EDE5F7;
+        --kidloop-border: #EEE7E5;
+        --kidloop-muted: #77717D;
+    }
+
+    .main-navbar,
+    .main-navbar * {
+        box-sizing: border-box;
+    }
 
     .main-navbar {
         width: 100%;
-
-        min-height: 72px;
-
-        padding: 0 5%;
-
+        min-height: 82px;
+        padding: 12px 5%;
         display: flex;
-
         align-items: center;
-
         justify-content: space-between;
-
-        gap: 30px;
-
-        background: #ffffff;
-
-        border-bottom: 1px solid #eeeeee;
+        gap: 28px;
+        background: #FFFFFF;
+        border-bottom: 1px solid var(--kidloop-border);
+        position: relative;
+        z-index: 100;
     }
 
+    .main-navbar a {
+        text-decoration: none;
+    }
 
-    /* LOGO */
-
+    /* BRAND LOGO */
     .logo {
-        color: #222;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+        position: relative;
+        color: var(--kidloop-plum);
+        text-decoration: none;
+    }
 
-        font-size: 27px;
+    .logo-mark {
+        width: 43px;
+        height: 43px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        border-radius: 14px 14px 14px 5px;
+        background: var(--kidloop-lavender);
+        color: var(--kidloop-plum);
+        font-size: 24px;
+        font-weight: 800;
+    }
 
-        font-weight: 700;
+    .logo-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
 
+    .logo-text {
+        display: inline-flex;
+        align-items: center;
+        color: var(--kidloop-plum);
+        font-size: 25px;
+        font-weight: 800;
         letter-spacing: -1px;
-
+        line-height: 1.1;
         white-space: nowrap;
     }
 
-
-    /* NAV LINKS */
-
-    .nav-links {
-        display: flex;
-
-        align-items: center;
-
-        gap: 28px;
+    .logo-text span {
+        color: var(--kidloop-coral);
     }
 
+    .logo-tagline {
+        color: var(--kidloop-muted);
+        font-size: 9px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+    }
+
+    /* NAVIGATION LINKS */
+    .nav-links {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 25px;
+    }
 
     .nav-links a {
         position: relative;
-
-        color: #333;
-
+        padding: 9px 0;
+        color: var(--kidloop-plum);
         font-size: 13px;
-
         font-weight: 500;
-
         white-space: nowrap;
-
         transition: color 0.2s ease;
     }
 
-
-    .nav-links a:hover {
-        color: #000;
+    .nav-links a:hover,
+    .nav-links a.active {
+        color: var(--kidloop-coral);
     }
-
 
     .nav-links a.active::after {
         content: "";
-
         position: absolute;
-
         left: 0;
-
         right: 0;
-
-        bottom: -8px;
-
-        height: 1px;
-
-        background: #222;
+        bottom: 1px;
+        height: 2px;
+        border-radius: 3px;
+        background: var(--kidloop-coral);
     }
 
-
-    /* NAV ACTIONS */
-
+    /* NAVIGATION ACTIONS */
     .nav-actions {
         display: flex;
-
         align-items: center;
-
-        gap: 16px;
+        gap: 15px;
+        flex-shrink: 0;
     }
-
 
     /* SEARCH */
-
     .search-box {
+        width: 205px;
+        height: 39px;
         display: flex;
-
         align-items: center;
-
-        width: 220px;
-
-        height: 38px;
-
-        border: 1px solid #dddddd;
-
-        background: #fff;
+        overflow: hidden;
+        border: 1px solid var(--kidloop-border);
+        border-radius: 22px;
+        background: var(--kidloop-ivory);
+        transition: border-color 0.2s ease;
     }
 
+    .search-box:focus-within {
+        border-color: var(--kidloop-coral);
+    }
 
     .search-box input {
         width: 100%;
-
+        min-width: 0;
         height: 100%;
-
+        padding: 0 0 0 13px;
         border: none;
-
         outline: none;
-
-        padding: 0 10px;
-
-        font-size: 12px;
+        background: transparent;
+        color: var(--kidloop-plum);
+        font-family: inherit;
+        font-size: 11px;
     }
 
+    .search-box input::placeholder {
+        color: #918994;
+    }
 
     .search-box button {
-        width: 40px;
-
+        width: 39px;
         height: 100%;
-
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
         border: none;
-
         background: transparent;
-
         cursor: pointer;
-
-        font-size: 15px;
     }
 
+    .search-box button svg {
+        width: 17px;
+        height: 17px;
+        fill: none;
+        stroke: var(--kidloop-plum);
+        stroke-width: 1.7;
+        stroke-linecap: round;
+    }
 
-    /* ICONS */
-
+    /* WISHLIST AND CART */
     .nav-icon {
-        position: relative;
-
-        color: #222;
-
-        font-size: 20px;
-
+        width: 31px;
+        height: 36px;
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
-        width: 28px;
-
-        height: 35px;
+        position: relative;
+        color: var(--kidloop-plum);
+        transition: color 0.2s ease, transform 0.2s ease;
     }
 
+    .nav-icon:hover {
+        color: var(--kidloop-coral);
+        transform: translateY(-1px);
+    }
+
+    .nav-icon svg {
+        width: 22px;
+        height: 22px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.6;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
 
     .cart-count {
         position: absolute;
-
-        top: 0;
-
+        top: -1px;
         right: -4px;
-
-        width: 15px;
-
-        height: 15px;
-
+        min-width: 16px;
+        height: 16px;
+        padding: 0 4px;
         display: flex;
-
         align-items: center;
-
         justify-content: center;
-
         border-radius: 50%;
-
-        background: #222;
-
-        color: white;
-
-        font-size: 8px;
+        background: var(--kidloop-coral);
+        color: #FFFFFF;
+        font-size: 9px;
+        font-weight: 700;
     }
 
+    /* PROFILE PICTURE */
+    .nav-profile {
+        width: 37px;
+        height: 37px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+        border: 1px solid var(--kidloop-border);
+        border-radius: 50%;
+        background: var(--kidloop-lavender);
+        color: var(--kidloop-plum);
+        text-decoration: none;
+    }
+
+    .nav-profile:hover {
+        border-color: var(--kidloop-coral);
+    }
+
+    .nav-profile-image {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .nav-profile-default {
+        display: grid;
+        place-items: center;
+        font-size: 23px;
+        line-height: 1;
+    }
 
     /* TABLET */
-
-    @media (max-width: 1000px) {
-
+    @media (max-width: 1100px) {
         .main-navbar {
-            padding: 0 3%;
-
-            gap: 15px;
+            padding-right: 3%;
+            padding-left: 3%;
+            gap: 18px;
         }
 
         .nav-links {
-            gap: 15px;
+            gap: 16px;
         }
 
         .search-box {
-            width: 160px;
+            width: 165px;
         }
-
-    }
-
-
-    /* MOBILE */
-
-    @media (max-width: 700px) {
-
-        .main-navbar {
-            flex-wrap: wrap;
-
-            padding: 15px 4%;
-
-            gap: 15px;
-        }
-
-
-        .logo {
-            font-size: 24px;
-        }
-
-
-        .nav-links {
-            order: 3;
-
-            width: 100%;
-
-            justify-content: center;
-
-            gap: 20px;
-
-            overflow-x: auto;
-        }
-
-
-        .nav-links a {
-            font-size: 12px;
-        }
-
 
         .nav-actions {
-            margin-left: auto;
+            gap: 11px;
         }
 
+        .logo-text {
+            font-size: 22px;
+        }
+    }
+
+    /* MOBILE */
+    @media (max-width: 760px) {
+        .main-navbar {
+            min-height: auto;
+            padding: 12px 4%;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 13px;
+        }
+
+        .logo-mark {
+            width: 37px;
+            height: 37px;
+            font-size: 21px;
+        }
+
+        .logo-text {
+            font-size: 21px;
+        }
+
+        .logo-tagline {
+            font-size: 8px;
+        }
+
+        .nav-actions {
+            gap: 9px;
+        }
 
         .search-box {
             display: none;
         }
 
+        .nav-links {
+            grid-column: 1 / -1;
+            order: 3;
+            width: 100%;
+            justify-content: flex-start;
+            gap: 25px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-size: 12px;
+        }
+
+        .nav-profile {
+            width: 33px;
+            height: 33px;
+        }
+
+        .nav-icon {
+            width: 27px;
+        }
+
+        .nav-icon svg {
+            width: 20px;
+            height: 20px;
+        }
     }
 
+    @media (max-width: 380px) {
+        .logo-text {
+            font-size: 19px;
+        }
+
+        .nav-actions {
+            gap: 6px;
+        }
+
+        .nav-links {
+            gap: 20px;
+        }
+    }
 </style>

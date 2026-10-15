@@ -1,0 +1,164 @@
+<%
+  const currentPage = typeof activePage !== "undefined"
+    ? activePage
+    : "dashboard";
+%>
+
+<aside class="admin-sidebar" id="adminSidebar">
+
+  <!-- KidLoop Logo -->
+  <a href="/admin/dashboard"
+     class="admin-brand"
+     aria-label="KidLoop Admin Dashboard">
+
+    <span class="admin-brand-mark">K</span>
+
+    <span class="admin-brand-content">
+      <span class="admin-brand-name">
+        Kid<span class="admin-brand-accent">Loop</span>
+      </span>
+
+      <small class="admin-brand-tagline">
+        Little Styles, Big Smiles.
+      </small>
+    </span>
+
+  </a>
+
+  <!-- Navigation Menu -->
+  <nav class="admin-navigation" aria-label="Admin navigation">
+
+    <ul class="admin-menu">
+
+      <!-- Dashboard -->
+      <li>
+        <a href="/admin/dashboard"
+           class="<%= currentPage === 'dashboard' ? 'active' : '' %>">
+          <span class="admin-menu-icon">▦</span>
+          <span class="admin-menu-label">Dashboard</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Product -->
+      <li>
+        <a href="/admin/products"
+           class="<%= currentPage === 'products' ? 'active' : '' %>">
+          <span class="admin-menu-icon">♧</span>
+          <span class="admin-menu-label">Product</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+             <!--variants-->
+      <li>
+    <a href="/admin/product-variants"
+       class="<%= currentPage === 'productVariants' ? 'active' : '' %>">
+        <span class="admin-menu-icon">🎨</span>
+        <span class="admin-menu-label">Product Variants</span>
+        <span class="admin-menu-arrow">›</span>
+    </a>
+</li>
+
+      <!-- Customers -->
+      <li>
+        <a href="/admin/user-management"
+           class="<%= currentPage === 'customers' ? 'active' : '' %>"
+           <%= currentPage === 'customers' ? 'aria-current="page"' : '' %>>
+          <span class="admin-menu-icon">♙</span>
+          <span class="admin-menu-label">Customers</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Coupons -->
+      <li>
+        <a href="/admin/coupons"
+           class="<%= currentPage === 'coupons' ? 'active' : '' %>">
+          <span class="admin-menu-icon">♢</span>
+          <span class="admin-menu-label">Coupons</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Banner -->
+      <li>
+        <a href="/admin/banners"
+           class="<%= currentPage === 'banners' ? 'active' : '' %>">
+          <span class="admin-menu-icon">▱</span>
+          <span class="admin-menu-label">Banner</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Orders -->
+      <li>
+        <a href="/admin/orders"
+           class="<%= currentPage === 'orders' ? 'active' : '' %>">
+          <span class="admin-menu-icon">▤</span>
+          <span class="admin-menu-label">Orders</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Returns & Refunds -->
+      <li>
+        <a href="/admin/returns-refunds"
+           class="<%= currentPage === 'returns-refunds' ? 'active' : '' %>">
+          <span class="admin-menu-icon">↩</span>
+          <span class="admin-menu-label">Returns &amp; Refunds</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Brand -->
+      <li>
+        <a href="/admin/brands"
+           class="<%= currentPage === 'brands' ? 'active' : '' %>">
+          <span class="admin-menu-icon">◇</span>
+          <span class="admin-menu-label">Brand</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Category -->
+      <li>
+        <a href="/admin/categories"
+           class="<%= currentPage === 'categories' ? 'active' : '' %>">
+          <span class="admin-menu-icon">▧</span>
+          <span class="admin-menu-label">Category</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Analytics -->
+      <li>
+        <a href="/admin/analytics"
+           class="<%= currentPage === 'analytics' ? 'active' : '' %>">
+          <span class="admin-menu-icon">▥</span>
+          <span class="admin-menu-label">Analytics</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+      <!-- Offer Management -->
+      <li>
+        <a href="/admin/offers"
+           class="<%= currentPage === 'offers' ? 'active' : '' %>">
+          <span class="admin-menu-icon">✧</span>
+          <span class="admin-menu-label">Offer Management</span>
+          <span class="admin-menu-arrow">›</span>
+        </a>
+      </li>
+
+    </ul>
+
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="admin-sidebar-note">
+    <strong>KidLoop Admin</strong>
+    <p>Manage your kids' clothing store in one place.</p>
+  </div>
+
+</aside>

@@ -871,50 +871,46 @@
 
 
         /* =====================================
-           SHOW MESSAGE
-        ===================================== */
+   SHOW SUCCESS AND ERROR MESSAGES
+===================================== */
 
-        function showSuccess(message) {
+let successMessageTimer;
 
-            successMessage.textContent =
-                message;
+function showSuccess(message) {
+    clearTimeout(successMessageTimer);
 
-            successMessage.style.display =
-                "block";
+    successMessage.textContent = message;
+    successMessage.style.display = "block";
 
+    errorMessage.textContent = "";
+    errorMessage.style.display = "none";
 
-            errorMessage.style.display =
-                "none";
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
+    // Hide success message after 4 seconds.
+    successMessageTimer = setTimeout(() => {
+        successMessage.style.display = "none";
+        successMessage.textContent = "";
+    }, 4000);
+}
 
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
+function showError(message) {
+    clearTimeout(successMessageTimer);
 
-        }
+    successMessage.textContent = "";
+    successMessage.style.display = "none";
 
+    errorMessage.textContent = message;
+    errorMessage.style.display = "block";
 
-        function showError(message) {
-
-            errorMessage.textContent =
-                message;
-
-            errorMessage.style.display =
-                "block";
-
-
-            successMessage.style.display =
-                "none";
-
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
 
         /* =====================================
            ESCAPE HTML

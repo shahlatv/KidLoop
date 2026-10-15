@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Kids' Clothing | KidLoop</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #30243f;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 6%;
+            background: white;
+            border-bottom: 1px solid #eee7f2;
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: bold;
+            color: #62516f;
+        }
+
+        .tagline {
+            color: #756482;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1250px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+            font-size: 32px;
+        }
+
+        .page-heading p {
+            color: #756482;
+        }
+
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 245px 1fr;
+            gap: 25px;
+        }
+
+        .filters {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #eee7f2;
+            height: fit-content;
+        }
+
+        .filters h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        .filter-group {
+            margin-bottom: 22px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d9d0e1;
+            border-radius: 7px;
+            background: white;
+            color: #30243f;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 8px;
+        }
+
+        button,
+        .button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 14px;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .primary-button {
+            background: #E98579;
+            color: #30243F;
+            border: 1px solid #E98579;
+        }
+
+        .primary-button:hover {
+            background: #30243F;
+            color: #FFFFFF;
+            border-color: #30243F;
+        }
+
+        .secondary-button {
+            background: #f5f1ec;
+            color: #30243F;
+            border: 1px solid #e5ddd5;
+        }
+
+        .filter-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-actions button,
+        .filter-actions a {
+            width: 100%;
+        }
+
+        .shop-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            max-width: 540px;
+        }
+
+        .search-form input {
+            min-width: 100px;
+        }
+
+        .results-count {
+            color: #756482;
+            font-size: 14px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #eee7f2;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(48, 36, 63, 0.08);
+        }
+
+        /* Product image and stock badge */
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            height: 225px;
+            background: #f3eef7;
+            overflow: hidden;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-placeholder {
+            height: 225px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f3eef7;
+            color: #756482;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 7px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .in-stock-badge {
+            background: #e4f5e9;
+            color: #216b38;
+        }
+
+        .out-of-stock-badge {
+            background: #fff0ef;
+            color: #b42318;
+            border: 1px solid #f3c3bf;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .category-name {
+            color: #756482;
+            font-size: 12px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        .product-description {
+            font-size: 13px;
+            color: #756482;
+            line-height: 1.5;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+
+        .original-price {
+            color: #8a8093;
+            font-size: 13px;
+            text-decoration: line-through;
+            margin-left: 5px;
+            font-weight: normal;
+        }
+
+        .discount {
+            color: #d5685c;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .stock-status {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 8px 0 12px;
+        }
+
+        .stock-status.available {
+            color: #267642;
+        }
+
+        .stock-status.unavailable {
+            color: #b42318;
+        }
+
+        .view-details-button {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .pagination a {
+            padding: 9px 13px;
+            border: 1px solid #d9d0e1;
+            border-radius: 6px;
+            background: white;
+        }
+
+        .pagination a.active {
+            background: #62516f;
+            color: white;
+            border-color: #62516f;
+        }
+
+        .empty-state {
+            background: white;
+            border: 1px solid #eee7f2;
+            border-radius: 12px;
+            text-align: center;
+            padding: 50px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state h2 {
+            margin-top: 0;
+        }
+
+        @media (max-width: 1000px) {
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .shop-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+
+            .product-image-container {
+                height: 165px;
+            }
+
+            .image-placeholder {
+                height: 165px;
+            }
+
+            .navbar {
+                padding: 15px 4%;
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .page-heading h1 {
+                font-size: 26px;
+            }
+
+            .search-form {
+                max-width: 100%;
+            }
+
+            .product-info {
+                padding: 11px;
+            }
+
+            .product-name {
+                font-size: 14px;
+            }
+
+            .price {
+                font-size: 16px;
+            }
+
+            .stock-badge {
+                top: 7px;
+                left: 7px;
+                padding: 6px 7px;
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-image-container {
+                height: 240px;
+            }
+
+            .image-placeholder {
+                height: 240px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include("../partials/topbar") %>
+    <%- include("../partials/navbar") %>
+
+    <main class="container">
+
+        <section class="page-heading">
+            <h1>Discover Their Little Style ✨</h1>
+            <p>Explore adorable styles for your little ones.</p>
+        </section>
+
+        <div class="shop-layout">
+
+            <!-- FILTER SIDEBAR -->
+            <aside class="filters">
+
+                <h2>Filters</h2>
+
+                <form action="/user/shop" method="GET">
+
+                    <input
+                        type="hidden"
+                        name="search"
+                        value="<%= search || '' %>"
+                    >
+
+                    <div class="filter-group">
+                        <label for="category">Category</label>
+
+                        <select id="category" name="category">
+                            <option value="">All Categories</option>
+
+                            <% categories.forEach(category => { %>
+                                <option
+                                    value="<%= category._id %>"
+                                    <%= String(selectedCategory || '') === String(category._id) ? 'selected' : '' %>
+                                >
+                                    <%= category.name %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Price Range (₹)</label>
+
+                        <div class="price-inputs">
+                            <input
+                                type="number"
+                                name="minPrice"
+                                placeholder="Min"
+                                min="0"
+                                value="<%= minPrice ?? '' %>"
+                            >
+
+                            <input
+                                type="number"
+                                name="maxPrice"
+                                placeholder="Max"
+                                min="0"
+                                value="<%= maxPrice ?? '' %>"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filterSort">Sort By</label>
+
+                        <select id="filterSort" name="sort">
+                            <option value="newest" <%= sort === 'newest' ? 'selected' : '' %>>
+                                Newest
+                            </option>
+
+                            <option value="price-asc" <%= sort === 'price-asc' ? 'selected' : '' %>>
+                                Price: Low to High
+                            </option>
+
+                            <option value="price-desc" <%= sort === 'price-desc' ? 'selected' : '' %>>
+                                Price: High to Low
+                            </option>
+
+                            <option value="name-asc" <%= sort === 'name-asc' ? 'selected' : '' %>>
+                                Name: A–Z
+                            </option>
+
+                            <option value="name-desc" <%= sort === 'name-desc' ? 'selected' : '' %>>
+                                Name: Z–A
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="primary-button">
+                            Apply Filters
+                        </button>
+
+                        <a href="/user/shop" class="button secondary-button">
+                            Clear All
+                        </a>
+                    </div>
+
+                </form>
+
+            </aside>
+
+            <!-- PRODUCTS SECTION -->
+            <section>
+
+                <div class="shop-topbar">
+
+                    <form
+                        action="/user/shop"
+                        method="GET"
+                        class="search-form"
+                    >
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search kids' clothing..."
+                            value="<%= search || '' %>"
+                            aria-label="Search products"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="category"
+                            value="<%= selectedCategory || '' %>"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="minPrice"
+                            value="<%= minPrice ?? '' %>"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="maxPrice"
+                            value="<%= maxPrice ?? '' %>"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="sort"
+                            value="<%= sort || 'newest' %>"
+                        >
+
+                        <button type="submit" class="primary-button">
+                            Search
+                        </button>
+
+                        <% if (search) { %>
+                            <a
+                                href="/user/shop"
+                                class="button secondary-button"
+                            >
+                                Clear
+                            </a>
+                        <% } %>
+
+                    </form>
+
+                    <div class="results-count">
+                        <%= totalProducts %> products found
+                    </div>
+
+                </div>
+
+                <div class="product-grid">
+
+                    <% if (!products || products.length === 0) { %>
+
+                        <div class="empty-state">
+                            <h2>No products found</h2>
+                            <p>Try changing your search or filters.</p>
+
+                            <a
+                                href="/user/shop"
+                                class="button primary-button"
+                            >
+                                View All Products
+                            </a>
+                        </div>
+
+                    <% } else { %>
+
+                        <% products.forEach(product => { %>
+
+                            <%
+                                const hasStock = product.inStock === true;
+                                const image = product.displayImage;
+                                const discountPercentage = Number(product.discount) || 0;
+                                const productPrice = Number(product.price) || 0;
+                                const finalPrice = productPrice * (1 - discountPercentage / 100);
+                                const description = product.description || '';
+                            %>
+
+                            <article class="product-card">
+
+                                <!-- PRODUCT IMAGE -->
+                                <div class="product-image-container">
+
+                                    <% if (image) { %>
+
+                                        <img
+                                            src="<%= image %>"
+                                            alt="<%= product.name %>"
+                                            class="product-image"
+                                            loading="lazy"
+                                        >
+
+                                    <% } else { %>
+
+                                        <div class="image-placeholder">
+                                            Product image coming soon
+                                        </div>
+
+                                    <% } %>
+
+                                    <!-- STOCK BADGE -->
+                                    <% if (!hasStock) { %>
+
+                                        <span class="stock-badge out-of-stock-badge">
+                                            Out of Stock
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="stock-badge in-stock-badge">
+                                            In Stock
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
+                                <!-- PRODUCT INFORMATION -->
+                                <div class="product-info">
+
+                                    <div class="category-name">
+                                        <%= product.category ? product.category.name : 'Kids Collection' %>
+                                    </div>
+
+                                    <h3 class="product-name">
+                                        <a href="/user/products/<%= product._id %>">
+                                            <%= product.name %>
+                                        </a>
+                                    </h3>
+
+                                    <p class="product-description">
+                                        <%= description.length > 85
+                                            ? description.substring(0, 85) + '...'
+                                            : description %>
+                                    </p>
+
+                                    <!-- PRICE -->
+                                    <div class="price">
+
+                                        ₹<%= finalPrice.toFixed(2) %>
+
+                                        <% if (discountPercentage > 0) { %>
+
+                                            <span class="original-price">
+                                                ₹<%= productPrice.toFixed(2) %>
+                                            </span>
+
+                                            <span class="discount">
+                                                <%= discountPercentage %>% OFF
+                                            </span>
+
+                                        <% } %>
+
+                                    </div>
+
+                                    <!-- STOCK STATUS -->
+                                    <% if (hasStock) { %>
+
+                                        <p class="stock-status available">
+                                            ✓ Available
+                                        </p>
+
+                                    <% } else { %>
+
+                                        <p class="stock-status unavailable">
+                                            Currently unavailable
+                                        </p>
+
+                                    <% } %>
+
+                                    <!-- DETAILS BUTTON -->
+                                    <a
+                                        href="/user/products/<%= product._id %>"
+                                        class="primary-button view-details-button"
+                                    >
+                                        View Details
+                                    </a>
+
+                                </div>
+
+                            </article>
+
+                        <% }) %>
+
+                    <% } %>
+
+                </div>
+
+                <!-- BACKEND PAGINATION -->
+                <% if (totalPages > 1) { %>
+
+                    <nav class="pagination" aria-label="Product pages">
+
+                        <% if (currentPage > 1) { %>
+
+                            <a href="/user/shop?<%= new URLSearchParams({ ...queryForPagination, page: currentPage - 1 }).toString() %>">
+                                Previous
+                            </a>
+
+                        <% } %>
+
+                        <% for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) { %>
+
+                            <a
+                                href="/user/shop?<%= new URLSearchParams({ ...queryForPagination, page: pageNumber }).toString() %>"
+                                class="<%= pageNumber === currentPage ? 'active' : '' %>"
+                            >
+                                <%= pageNumber %>
+                            </a>
+
+                        <% } %>
+
+                        <% if (currentPage < totalPages) { %>
+
+                            <a href="/user/shop?<%= new URLSearchParams({ ...queryForPagination, page: currentPage + 1 }).toString() %>">
+                                Next
+                            </a>
+
+                        <% } %>
+
+                    </nav>
+
+                <% } %>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <%- include("../partials/footer") %>
+
+</body>
+</html>
